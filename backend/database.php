@@ -25,11 +25,23 @@ class Database {
     public function getConnection() {
         if ($this->connection === null) {
             try {
-                $dsn = "mysql:host={$this->host};dbname={$this->dbName};charset=utf8mb4";
+                // Conectar sem especificar o banco de dados
+                $dsn = "mysql:host={$this->host};charset=utf8mb4";
                 $this->connection = new PDO($dsn, $this->username, $this->password);
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                 $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+                // Criar o banco de dados se não existir
+                $this->connection->exec("CREATE DATABASE IF NOT EXISTS {$this->dbName}");
+
+                // Agora, conectar ao banco de dados específico
+                $dsnWithDb = "mysql:host={$this->host};dbname={$this->dbName};charset=utf8mb4";
+                $this->connection = new PDO($dsnWithDb, $this->username, $this->password);
+                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
             } catch (PDOException $e) {
                 error_log("Database connection error: " . $e->getMessage());
                 throw new Exception("Database connection error.");

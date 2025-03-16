@@ -42,7 +42,7 @@ try {
         PRIMARY KEY (id)
     );";
 
-    $expectedUsersColumns = ['id', 'username', 'password', 'created_at', 'updated_at', 'last_login', 'avatar_url'];
+    $expectedUsersColumns = ['id', 'user', 'password', 'created_at', 'updated_at', 'last_login', 'avatar_url'];
 
     $createDashboardTable = "
     CREATE TABLE dashboard (
