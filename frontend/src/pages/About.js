@@ -9,9 +9,11 @@ import {
   ListItemIcon, 
   ListItemText, 
   Toolbar,
-  Grid
+  Grid,
+  Link
 } from '@mui/material';
-import { Info, Code, Update } from '@mui/icons-material';
+import { Code, Update } from '@mui/icons-material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -58,14 +60,15 @@ const About = ({ notificationsRef }) => {
               className="aboutPaper"
             >
               <Box className="aboutTitleBox">
-                <Info className="aboutInfoIcon" />
                 <Typography variant="h4" component="h1">
                   About SafePass
                 </Typography>
               </Box>
 
-              <Typography variant="body1" paragraph>
-                SafePass is a platform that allows you to store passwords and create secure passwords.
+              <Typography variant="body1" paragraph className="aboutSubtitle">
+                SafePass  is a platform that helps you create stronger passwords 
+                and manage them easily. You can update, delete, and check the strength 
+                of your passwords to keep your accounts secure.
               </Typography>
 
               <List>
@@ -86,6 +89,22 @@ const About = ({ notificationsRef }) => {
                   <ListItemText 
                     primary="Version" 
                     secondary="1.0.0"
+                  />
+                </ListItem>
+
+                <ListItem>
+                  <ListItemIcon>
+                    <GitHubIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={
+                      <>
+                        Developed by{' '}
+                        <Link href="https://github.com/andresnalegre" target="_blank" rel="noopener">
+                          Andres Nicolas
+                        </Link>
+                      </>
+                    }
                   />
                 </ListItem>
               </List>

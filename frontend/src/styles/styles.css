@@ -1,5 +1,9 @@
-/* Login */
+@font-face {
+    font-family: 'Helvetica-BoldOblique';
+    src: url('../assets/fonts/Helvetica-BoldOblique.ttf') format('truetype');
+}
 
+/* Login */
 .safeContainer {
     min-height: 100vh;
     display: flex;
@@ -8,7 +12,7 @@
     justify-content: center;
     background-color: #fff;
 }
-  
+
 .safePaper {
     padding: 32px;
     width: 100%;
@@ -21,34 +25,34 @@
     flex-direction: column;
     align-items: center;
 }
-  
+
 .safePaper:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
-  
+
 .safeHeader {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 24px;
 }
-  
+
 .safeLogo {
     width: 40px;
     height: 40px;
     margin-bottom: 8px;
 }
-  
+
 .safeTitle {
     font-weight: bold;
     margin-bottom: 8px;
     text-align: center;
 }
-  
+
 .safeTextField {
     border-radius: 8px;
 }
-  
+
 .safeSubmitButton {
     margin-top: 24px;
     margin-bottom: 16px;
@@ -57,7 +61,7 @@
     text-transform: none;
     font-size: 1rem;
 }
-  
+
 .safeLinkContainer {
     margin-top: 24px;
     display: flex;
@@ -66,23 +70,17 @@
     flex-wrap: wrap;
     gap: 8px;
 }
-  
+
 .safeLink {
     text-decoration: none;
     color: #1976d2;
 }
-  
+
 .safeLink:hover {
     text-decoration: underline;
 }
 
 /* Register */
-
-@font-face {
-    font-family: 'MyriadPro-Bold';
-    src: url('../assets/fonts/Helvetica-BoldOblique.ttf') format('opentype');
-}
-  
 .registerContainer {
     position: relative;
     min-height: 100vh;
@@ -91,21 +89,21 @@
     justify-content: center;
     background-color: #fff;
 }
-  
+
 .registerBackButton {
     position: fixed !important;
     top: 16px !important;
     left: 16px !important;
     z-index: 1000;
 }
-  
+
 .registerMainContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-  
+
 .registerPaper {
     padding: 40px;
     width: 100%;
@@ -119,29 +117,29 @@
     flex-direction: column;
     justify-content: center;
 }
-  
+
 .registerPaper:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
-  
+
 .registerTitleBox {
     margin-bottom: 24px;
 }
-  
+
 .registerTitle {
     font-family: 'MyriadPro-Bold', sans-serif;
     font-size: 3rem;
     font-weight: bold;
 }
-  
+
 .registerTextField {
     margin-bottom: 16px;
 }
-  
+
 .registerTextField .MuiOutlinedInput-root {
     border-radius: 8px;
 }
-  
+
 .registerSubmitButton {
     margin-top: 24px;
     height: 48px;
@@ -151,18 +149,12 @@
     background-color: #1976d2;
     color: #fff;
 }
-  
+
 .registerSubmitButton:hover {
     background-color: #1976d2;
 }
 
 /* ForgotPassword */
-
-@font-face {
-    font-family: 'MyriadPro-Bold';
-    src: url('../assets/fonts/Helvetica-BoldOblique.ttf') format('opentype');
-}
-  
 .resetContainer {
     position: relative;
     min-height: 100vh;
@@ -171,21 +163,21 @@
     justify-content: center;
     background-color: #fff;
 }
-  
+
 .resetBackButton {
     position: fixed !important;
     top: 16px !important;
     left: 16px !important;
     z-index: 1000;
 }
-  
+
 .resetMainContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-  
+
 .resetPaper {
     padding: 40px;
     width: 100%;
@@ -199,29 +191,29 @@
     flex-direction: column;
     justify-content: center;
 }
-  
+
 .resetPaper:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
-  
+
 .resetTitleBox {
     margin-bottom: 24px;
 }
-  
+
 .resetTitle {
     font-family: 'MyriadPro-Bold', sans-serif;
     font-size: 1.5rem;
     font-weight: bold;
 }
-  
+
 .resetTextField {
     margin-bottom: 16px;
 }
-  
+
 .resetTextField .MuiOutlinedInput-root {
     border-radius: 8px;
 }
-  
+
 .resetSubmitButton {
     margin-top: 24px;
     height: 48px;
@@ -231,13 +223,12 @@
     background-color: #1976d2;
     color: #fff;
 }
-  
+
 .resetSubmitButton:hover {
     background-color: #1976d2;
 }
 
 /* Navbar */
-
 .navAppBar {
     width: 90%;
     margin-left: auto;
@@ -272,12 +263,6 @@
 }
 
 /* Sidebar */
-
-@font-face {
-    font-family: 'Helvetica-BoldOblique';
-    src: url('../assets/fonts/Helvetica-BoldOblique.ttf') format('truetype');
-}
-
 .sidebarToolbar {
     display: flex !important;
     align-items: center !important;
@@ -285,7 +270,7 @@
     user-select: none !important;
     background-color: #8e8e8e;
 }
-  
+
 .sidebarLogo {
     height: 64px !important;
     width: auto !important;
@@ -315,51 +300,50 @@
 }
 
 /* Dashboard */
-
 .dashContainer {
     display: flex;
 }
-  
+
 .dashMain {
     flex-grow: 1;
     padding: 24px;
 }
-  
+
 .dashHeader {
     margin-bottom: 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-  
+
 .dashActions {
     display: flex;
     gap: 16px;
 }
-  
+
 .passHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
 }
-  
+
 .passCount {
     margin-left: 8px;
 }
-  
+
 .searchField {
     margin-bottom: 24px;
 }
-  
+
 .searchIcon {
     margin-right: 8px;
 }
-  
+
 .passCard {
     margin-bottom: 16px;
 }
-  
+
 .passDetails {
     display: flex;
     justify-content: space-between;
@@ -399,61 +383,74 @@ body.dark-mode .passText {
 }
 
 /* PasswordGenerator */
-
 .passwordGenCardContent {
     padding: 16px;
 }
-  
+
 .passwordGenSliderBox {
     margin-bottom: 16px;
 }
-  
+
 .passwordGenCheckboxBox {
     margin-bottom: 16px;
 }
-  
+
 .passwordGenPaper {
     padding: 8px;
     margin-bottom: 16px;
     min-height: 0px;
 }
-  
+
 .passwordGenEndAdornmentBox {
     display: flex;
     gap: 8px;
 }
 
 /* About */
-
 .aboutContainer {
     position: relative;
     min-height: 100vh;
 }
-  
+
 .aboutContentContainer {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     min-height: calc(100vh - 64px);
+    padding-right: 20px;
 }
-  
+
 .aboutPaper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     padding: 32px;
-    text-align: center;
     background-color: #f5f5f5;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border-radius: 24px;
     max-width: 800px;
-    margin: 0 auto;
+    height: 500px;
+    margin: 0;
+    margin-top: 70px;
+    margin-left: 150px;
 }
-  
+
 .aboutTitleBox {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 24px;
+    width: 100%;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    text-align: center;
 }
-  
+
+.aboutSubtitle {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
 .aboutInfoIcon {
     font-size: 40px;
     margin-right: 12px;
@@ -461,48 +458,46 @@ body.dark-mode .passText {
 }
 
 /* Profile */
-
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
-  
+
 .paper {
     padding: 24px;
     text-align: center;
     position: relative;
 }
-  
+
 .backButton {
     position: fixed !important;
     top: 16px !important;
     left: 16px !important;
     z-index: 1000;
 }
-  
+
 .avatar {
     width: 100px;
     height: 100px;
     font-size: 2.5rem;
     background-color: var(--mui-palette-primary-main);
-  }
-  
+}
+
 .form {
     margin-top: 16px;
 }
-  
+
 .iconButton {
     margin-top: 8px;
 }
-  
+
 .textFieldLabel {
     transition: none;
 }
 
 /* Footer */
-
 .footer {
     padding: 16px;
     margin-top: auto;
