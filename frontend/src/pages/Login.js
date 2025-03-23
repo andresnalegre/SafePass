@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Box as SafeBox,
@@ -8,21 +8,26 @@ import {
   Button as SafeButton,
   IconButton as SafeIconButton,
   InputAdornment as SafeInputAdornment,
-  Alert as SafeAlert,
-  Fade as SafeFade,
   Link as SafeLink
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import SafePassImage from '../assets/SafePass.png';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import SafePassImage from '../assets/logo.png';
 import '../styles/styles.css';
 
-const Login = () => {
+const Login = ({ notificationsRef }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.logoutMessage) {
+      notificationsRef.current.showSnackbar(location.state.logoutMessage, 'success');
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate, notificationsRef]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,16 +42,18 @@ const Login = () => {
           password,
         }),
       });
-
+  
       const data = await response.json();
       if (data.success) {
-        setError(null);
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('username', username);
+        notificationsRef.current.showSnackbar('Login successful!', 'success');
         navigate('/dashboard');
       } else {
-        setError(data.message || 'Invalid credentials');
+        notificationsRef.current.showSnackbar(data.message || 'Invalid credentials', 'error');
       }
     } catch (error) {
-      setError('Erro ao conectar com o servidor.');
+      notificationsRef.current.showSnackbar('Error connecting to the server.', 'error');
     }
   };
 
@@ -56,95 +63,81 @@ const Login = () => {
   return (
     <Container component="main" maxWidth="xs">
       <SafeBox className="safeContainer">
-        <SafeFade in={true} timeout={1000}>
-          <SafePaper className="safePaper" elevation={3}>
-            <SafeBox className="safeHeader">
-              <SafeBox
-                component="img"
-                src={SafePassImage}
-                alt="SafePass"
-                className="safeLogo"
-              />
-              <SafeTypography component="h1" variant="h5" className="safeTitle">
-                Welcome to SafePass
-              </SafeTypography>
-              <SafeTypography variant="body2" color="text.secondary" align="center">
-                All passwords under your control
-              </SafeTypography>
+        <SafePaper className="safePaper" elevation={3}>
+          <SafeBox className="safeHeader">
+            <SafeBox
+              component="img"
+              src={SafePassImage}
+              alt="SafePass"
+              className="safeLogo"
+            />
+            <SafeTypography component="h1" variant="h5" className="safeTitle">
+              Welcome to SafePass
+            </SafeTypography>
+            <SafeTypography variant="body2" color="text.secondary" align="center">
+              All passwords under your control
+            </SafeTypography>
+          </SafeBox>
+
+          <form onSubmit={handleSubmit} noValidate>
+            <SafeTextField
+              required
+              fullWidth
+              margin="normal"
+              id="username"
+              name="username"
+              label="Username"
+              autoComplete="username"
+              autoFocus
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              InputProps={{
+                className: 'safeTextField'
+              }}
+            />
+
+            <SafeTextField
+              required
+              fullWidth
+              margin="normal"
+              id="password"
+              name="password"
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                className: 'safeTextField',
+                endAdornment: (
+                  <SafeInputAdornment position="end">
+                    <SafeIconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </SafeIconButton>
+                  </SafeInputAdornment>
+                ),
+              }}
+            />
+
+            <SafeButton type="submit" fullWidth variant="contained" className="safeSubmitButton">
+              Sign In
+            </SafeButton>
+
+            <SafeBox className="safeLinkContainer">
+              <SafeLink component={RouterLink} to="/register" variant="body2" className="safeLink">
+                Don't have an account? Sign Up
+              </SafeLink>
+              <SafeLink component={RouterLink} to="/forgot-password" variant="body2" className="safeLink">
+                Forgot password?
+              </SafeLink>
             </SafeBox>
-
-            {error && (
-              <SafeFade in={true}>
-                <SafeAlert
-                  severity="error"
-                  className="safeAlert"
-                  onClose={() => setError(null)}
-                >
-                  {error}
-                </SafeAlert>
-              </SafeFade>
-            )}
-
-            <form onSubmit={handleSubmit} noValidate>
-              <SafeTextField
-                required
-                fullWidth
-                margin="normal"
-                id="username"
-                name="username"
-                label="Username"
-                autoComplete="username"
-                autoFocus
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                InputProps={{
-                  className: 'safeTextField'
-                }}
-              />
-
-              <SafeTextField
-                required
-                fullWidth
-                margin="normal"
-                id="password"
-                name="password"
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                InputProps={{
-                  className: 'safeTextField',
-                  endAdornment: (
-                    <SafeInputAdornment position="end">
-                      <SafeIconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </SafeIconButton>
-                    </SafeInputAdornment>
-                  ),
-                }}
-              />
-
-              <SafeButton type="submit" fullWidth variant="contained" className="safeSubmitButton">
-                Sign In
-              </SafeButton>
-
-              <SafeBox className="safeLinkContainer">
-                <SafeLink component={RouterLink} to="/register" variant="body2" className="safeLink">
-                  Don't have an account? Sign Up
-                </SafeLink>
-                <SafeLink component={RouterLink} to="/forgot-password" variant="body2" className="safeLink">
-                  Forgot password?
-                </SafeLink>
-              </SafeBox>
-            </form>
-          </SafePaper>
-        </SafeFade>
+          </form>
+        </SafePaper>
       </SafeBox>
     </Container>
   );

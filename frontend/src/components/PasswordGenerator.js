@@ -13,11 +13,10 @@ import {
   Paper,
 } from '@mui/material';
 import { Refresh as GenerateIcon, ContentCopy as CopyIcon } from '@mui/icons-material';
-import { useSnackbar } from 'notistack';
 import PasswordStrength from '../components/PasswordStrength';
 import '../styles/styles.css';
 
-const PasswordGenerator = ({ onGenerate }) => {
+const PasswordGenerator = ({ onGenerate, notificationsRef }) => {
   const [options, setOptions] = useState({
     length: 16,
     useUppercase: true,
@@ -25,7 +24,6 @@ const PasswordGenerator = ({ onGenerate }) => {
     useSpecial: true,
   });
   const [generatedPassword, setGeneratedPassword] = useState('');
-  const { enqueueSnackbar } = useSnackbar();
 
   const generatePassword = () => {
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -62,9 +60,9 @@ const PasswordGenerator = ({ onGenerate }) => {
   const handleCopyPassword = async () => {
     try {
       await navigator.clipboard.writeText(generatedPassword);
-      enqueueSnackbar('Password copied to clipboard', { variant: 'success' });
+      notificationsRef.current.showSnackbar('Password copied to clipboard', 'success');
     } catch (err) {
-      enqueueSnackbar('Failed to copy password', { variant: 'error' });
+      notificationsRef.current.showSnackbar('Failed to copy password', 'error');
     }
   };
 

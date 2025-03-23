@@ -1,5 +1,3 @@
-// src/styles/Theme.js
-
 import React, { createContext, useState, useContext } from 'react';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +14,16 @@ export const ThemeProvider = ({ children }) => {
       createTheme({
         palette: {
           mode: darkMode ? 'dark' : 'light',
+          ...(darkMode && {
+            background: {
+              default: '#4e4e4e',
+              paper: '#4e4e4e',
+            },
+            text: {
+              primary: '#f5f5f5',
+              secondary: '#cfcfcf',
+            },
+          }),
         },
       }),
     [darkMode]

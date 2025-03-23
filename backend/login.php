@@ -1,5 +1,5 @@
 <?php
-session_start(); // Iniciar a sessão
+session_start();
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        // Use o nome correto do campo do banco de dados
         $stmt = $conn->prepare("SELECT * FROM users WHERE user = :username");
         $stmt->execute(['username' => $username]);
 
@@ -23,8 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['user']; // Use 'user' aqui também
-                echo json_encode(['success' => true, 'message' => 'Login successful']);
+                $_SESSION['username'] = $user['user'];
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Login successful',
+                    'user_id' => $user['id']
+                ]);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
             }

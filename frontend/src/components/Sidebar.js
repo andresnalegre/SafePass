@@ -4,7 +4,6 @@ import {
   Drawer,
   Toolbar,
   List,
-  Typography,
   Divider,
   ListItem,
   ListItemIcon,
@@ -15,7 +14,7 @@ import {
   Info as InfoIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import SafePassLogo from '../assets/SafePass.png';
+import SafePassImage from '../assets/SafePass.png';
 import '../styles/styles.css';
 
 const MENU_ITEMS = [
@@ -31,13 +30,11 @@ const Sidebar = ({ mobileOpen, onDrawerToggle }) => {
     <Box>
       <Toolbar className="sidebarToolbar">
         <img 
-          src={SafePassLogo} 
-          alt="SafePass Logo" 
+          src={SafePassImage} 
+          alt="SafePass"
           className="sidebarLogo"
+          draggable="false"
         />
-        <Typography variant="h6" noWrap component="div" className="sidebarTitle">
-          SafePass
-        </Typography>
       </Toolbar>
       <Divider />
       <List>
@@ -62,15 +59,15 @@ const Sidebar = ({ mobileOpen, onDrawerToggle }) => {
         variant="temporary"
         open={mobileOpen}
         onClose={onDrawerToggle}
-        ModalProps={{ keepMounted: true }}
         classes={{ paper: 'sidebarDrawerPaper' }}
+        ModalProps={{ keepMounted: true }}
       >
         {drawer}
       </Drawer>
       <Drawer
         variant="permanent"
-        classes={{ paper: 'sidebarDrawerPaper' }}
         open
+        classes={{ paper: 'sidebarDrawerPaper' }}
       >
         {drawer}
       </Drawer>

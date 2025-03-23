@@ -5,16 +5,31 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Typography,
 } from '@mui/material';
-import { Menu as MenuIcon, Logout, Settings as SettingsIcon, Brightness4, Brightness7 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { Settings as SettingsIcon, Brightness4, Brightness7 } from '@mui/icons-material';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import { useTheme } from '../styles/Theme';
 import '../styles/styles.css';
 
-const Navbar = ({ onDrawerToggle }) => {
+const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { darkMode, toggleDarkMode } = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case '/dashboard':
+        return 'Dashboard';
+      case '/about':
+        return 'About';
+      default:
+        return '';
+    }
+  };
 
   const handleMenuOpen = useCallback((event) => {
     setAnchorEl(event.currentTarget);
@@ -29,27 +44,45 @@ const Navbar = ({ onDrawerToggle }) => {
     handleMenuClose();
   }, [navigate, handleMenuClose]);
 
-  const handleLogout = useCallback(() => {
-    navigate('/');
+  const handleLogout = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:8000/logout.php', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('username');
+        sessionStorage.clear();
+        enqueueSnackbar(data.message, { variant: 'success' });
+        navigate('/login', { state: { logoutMessage: data.message } });
+      } else {
+        enqueueSnackbar('Failed to log out. Please try again.', { variant: 'error' });
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+      enqueueSnackbar('Error logging out. Please try again.', { variant: 'error' });
+    }
     handleMenuClose();
-  }, [navigate, handleMenuClose]);
+  }, [navigate, handleMenuClose, enqueueSnackbar]);
 
   return (
     <AppBar position="fixed" className="navAppBar">
       <Toolbar>
-        <IconButton
-          color="inherit"
-          edge="start"
-          onClick={onDrawerToggle}
-          className={`navMenuButton ${window.innerWidth < 600 ? 'navMenuButtonVisible' : ''}`}
+        <Typography
+          variant="h6"
+          className="navDashboardText noSelect"
         >
-          <MenuIcon />
-        </IconButton>
+          {getPageTitle()}
+        </Typography>
         <div className="navFlexGrow" />
-        <IconButton color="inherit" onClick={toggleDarkMode}>
+        <IconButton color="inherit" onClick={toggleDarkMode} aria-label="Toggle dark mode">
           {darkMode ? <Brightness4 /> : <Brightness7 />}
         </IconButton>
-        <IconButton color="inherit" onClick={handleMenuOpen}>
+        <IconButton color="inherit" onClick={handleMenuOpen} aria-label="Open settings menu">
           <SettingsIcon />
         </IconButton>
         <Menu
@@ -58,9 +91,7 @@ const Navbar = ({ onDrawerToggle }) => {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={handleProfile}>Profile</MenuItem>
-          <MenuItem onClick={handleLogout} startIcon={<Logout />}>
-            Logout
-          </MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

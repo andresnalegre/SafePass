@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Grid,
@@ -26,14 +27,13 @@ import {
   Search as SearchIcon,
   Edit as EditIcon,
 } from '@mui/icons-material';
-import { useSnackbar } from 'notistack';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import PasswordGenerator from '../components/PasswordGenerator';
 import PasswordStrength from '../components/PasswordStrength';
 import '../styles/styles.css';
 
-const Dashboard = () => {
+const Dashboard = ({ notificationsRef }) => {
   const [passwords, setPasswords] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [visiblePasswords, setVisiblePasswords] = useState({});
@@ -41,43 +41,41 @@ const Dashboard = () => {
   const [newPassword, setNewPassword] = useState({ title: '', username: '', password: '' });
   const [editingPassword, setEditingPassword] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSaveEnabled, setIsSaveEnabled] = useState(false);
   const [userName, setUserName] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPasswords = async () => {
+    const checkAuthentication = async () => {
+      const storedUserName = localStorage.getItem('username');
+      
+      if (!storedUserName) {
+        notificationsRef.current.showSnackbar('User not logged in', 'error');
+        navigate('/login');
+        return;
+      }
+
+      setUserName(storedUserName);
+
       try {
-        const response = await fetch('http://localhost:8000/dashboard.php');
+        const response = await fetch(`http://localhost:8000/dashboard.php?username=${storedUserName}`);
         const data = await response.json();
+        
         if (data.success) {
           setPasswords(data.passwords);
         } else {
-          enqueueSnackbar('Failed to fetch passwords', { variant: 'error' });
+          notificationsRef.current.showSnackbar(data.message || 'Failed to fetch data', 'error');
+          navigate('/login');
         }
       } catch (error) {
-        enqueueSnackbar('Error fetching passwords', { variant: 'error' });
+        notificationsRef.current.showSnackbar('Error fetching data', 'error');
+        navigate('/login');
       }
     };
 
-    const fetchUserName = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/dashboard.php');
-        const data = await response.json();
-        if (data.success && data.username) {
-          setUserName(data.username);
-        } else {
-          enqueueSnackbar('Failed to fetch user name', { variant: 'error' });
-        }
-      } catch (error) {
-        enqueueSnackbar('Error fetching user name', { variant: 'error' });
-      }
-    };
-
-    fetchPasswords();
-    fetchUserName();
-  }, [enqueueSnackbar]);
+    checkAuthentication();
+  }, [navigate, notificationsRef]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -86,9 +84,9 @@ const Dashboard = () => {
   const handleCopyPassword = async (password) => {
     try {
       await navigator.clipboard.writeText(password);
-      enqueueSnackbar('Password copied to clipboard', { variant: 'success' });
+      notificationsRef.current.showSnackbar('Password copied to clipboard', 'success');
     } catch (err) {
-      enqueueSnackbar('Failed to copy password', { variant: 'error' });
+      notificationsRef.current.showSnackbar('Failed to copy password', 'error');
     }
   };
 
@@ -104,19 +102,21 @@ const Dashboard = () => {
       const response = await fetch('http://localhost:8000/dashboard.php', {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams({ id: passwordId }),
+        body: JSON.stringify({ id: passwordId }),
       });
+
       const data = await response.json();
+
       if (data.success) {
         setPasswords((prev) => prev.filter((p) => p.id !== passwordId));
-        enqueueSnackbar('Password deleted successfully', { variant: 'success' });
+        notificationsRef.current.showSnackbar(data.message || 'Password deleted successfully', 'success');
       } else {
-        enqueueSnackbar('Failed to delete password', { variant: 'error' });
+        notificationsRef.current.showSnackbar(data.message || 'Failed to delete password', 'error');
       }
     } catch (error) {
-      enqueueSnackbar('Error deleting password', { variant: 'error' });
+      notificationsRef.current.showSnackbar('Error deleting password', 'error');
     }
   };
 
@@ -136,44 +136,57 @@ const Dashboard = () => {
 
   const handleSavePassword = async () => {
     if (!newPassword.title || !newPassword.username || !newPassword.password) {
-      enqueueSnackbar('All fields are required', { variant: 'warning' });
+      notificationsRef.current.showSnackbar('All fields are required', 'warning');
       return;
     }
   
     const method = editingPassword ? 'PUT' : 'POST';
-    const url = editingPassword ? `http://localhost:8000/dashboard.php?id=${editingPassword.id}` : 'http://localhost:8000/dashboard.php';
+    const url = editingPassword 
+      ? `http://localhost:8000/dashboard.php?id=${editingPassword.id}` 
+      : 'http://localhost:8000/dashboard.php';
   
     try {
+      const payload = {
+        title: newPassword.title,
+        username: newPassword.username,
+        password: newPassword.password,
+        created_by: userName,
+      };
+
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams({
-          title: newPassword.title,
-          username: newPassword.username,
-          password: newPassword.password,
-        }),
+        body: JSON.stringify(payload),
       });
+      
       const data = await response.json();
+      
       if (data.success) {
         if (editingPassword) {
           setPasswords((prev) =>
             prev.map((p) => (p.id === editingPassword.id ? { ...newPassword, id: p.id } : p))
           );
-          enqueueSnackbar('Password updated successfully', { variant: 'success' });
+          notificationsRef.current.showSnackbar(data.message || 'Password updated successfully', 'success');
         } else {
-          setPasswords((prev) => [...prev, { ...newPassword, id: Date.now() }]);
-          enqueueSnackbar('Password added successfully', { variant: 'success' });
+          const newEntry = { 
+            ...newPassword, 
+            id: data.id || Date.now(), 
+            created_by: userName 
+          };
+          setPasswords((prev) => [...prev, newEntry]);
+          notificationsRef.current.showSnackbar(data.message || 'Password added successfully', 'success');
         }
-        setDialogOpen(false); // Fechar o diálogo após salvar
+        
+        setDialogOpen(false);
         setEditingPassword(null);
-        setIsSaveEnabled(false); // Desabilitar o botão Save
+        setIsSaveEnabled(false);
       } else {
-        enqueueSnackbar('Failed to save password', { variant: 'error' });
+        notificationsRef.current.showSnackbar(data.message || 'Failed to save password', 'error');
       }
     } catch (error) {
-      enqueueSnackbar('Error saving password', { variant: 'error' });
+      notificationsRef.current.showSnackbar('Error saving password', 'error');
     }
   };
 
@@ -197,18 +210,18 @@ const Dashboard = () => {
       <Sidebar mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle} />
       <Container component="main" maxWidth="xl" className="dashMain">
         <Toolbar />
-        <Box className="dashHeader">
-          <Typography variant="h4" gutterBottom>Welcome, {userName}</Typography>
-          <Box className="dashActions">
-            <Button
-              variant="contained"
-              color="success"
-              startIcon={<AddIcon />}
-              onClick={handleAddPassword}
-            >
-              Add Password
-            </Button>
-          </Box>
+        <Box className="dashHeader" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h6" sx={{ flexGrow: 1, fontSize: '1.5rem' }}>
+            Welcome, {userName}!
+          </Typography>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<AddIcon />}
+            onClick={handleAddPassword}
+          >
+            Add Password
+          </Button>
         </Box>
 
         <Grid container spacing={3}>
@@ -242,8 +255,12 @@ const Dashboard = () => {
                       <CardContent>
                         <Box className="passDetails">
                           <Box>
-                            <Typography variant="h6">{password.title}</Typography>
-                            <Typography color="textSecondary">{password.username}</Typography>
+                            <Typography variant="h6" sx={{ fontSize: '1.25rem', color: 'text.primary' }}>
+                              {password.title}
+                            </Typography>
+                            <Typography sx={{ color: 'text.secondary', fontSize: '1rem' }}>
+                              {password.username}
+                            </Typography>
                           </Box>
                           <Box className="passActions">
                             <Tooltip title={visiblePasswords[password.id] ? 'Hide Password' : 'Show Password'}>
@@ -272,6 +289,12 @@ const Dashboard = () => {
                           <Typography
                             variant="body2"
                             className="passText"
+                            sx={{
+                              backgroundColor: 'background.paper',
+                              color: 'text.primary',
+                              padding: '0.5rem',
+                              borderRadius: '4px',
+                            }}
                           >
                             {password.password}
                           </Typography>
@@ -286,7 +309,10 @@ const Dashboard = () => {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <PasswordGenerator onGenerate={(password) => setNewPassword((prev) => ({ ...prev, password }))} />
+            <PasswordGenerator 
+              onGenerate={(password) => setNewPassword((prev) => ({ ...prev, password }))}
+              notificationsRef={notificationsRef}
+            />
           </Grid>
         </Grid>
 

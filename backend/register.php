@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        // Use o nome correto do campo do banco de dados
         $stmt = $conn->prepare("SELECT * FROM users WHERE user = :username");
         $stmt->execute(['username' => $username]);
 
@@ -23,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // Use o nome correto do campo do banco de dados
             $stmt = $conn->prepare("INSERT INTO users (user, password) VALUES (:username, :password)");
             $stmt->execute(['username' => $username, 'password' => $hashedPassword]);
             echo json_encode(['success' => true, 'message' => 'User registered successfully']);

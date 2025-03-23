@@ -6,48 +6,41 @@ import {
   Typography,
   TextField,
   Button,
-  Alert,
-  Fade,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Fade
 } from '@mui/material';
 import { ArrowBack, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import '../styles/styles.css';
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ notificationsRef }) => {
   const [username, setUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!username) {
-      setError('Please enter a username');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Please enter a username', 'error');
       return;
     }
 
     if (!newPassword) {
-      setError('Please enter a new password');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Please enter a new password', 'error');
       return;
     }
 
     if (!confirmPassword) {
-      setError('Please confirm your password');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Please confirm your password', 'error');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Passwords do not match', 'error');
       return;
     }
 
@@ -65,18 +58,15 @@ const ForgotPassword = () => {
 
       const data = await response.json();
       if (data.success) {
-        setMessage(data.message);
-        setError(null);
+        notificationsRef.current.showSnackbar(data.message, 'success');
         setTimeout(() => {
           navigate('/');
         }, 2000);
       } else {
-        setError(data.message);
-        setMessage(null);
+        notificationsRef.current.showSnackbar(data.message, 'error');
       }
     } catch (err) {
-      setError('Error connecting to server');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Error connecting to server', 'error');
     }
   };
 
@@ -101,22 +91,6 @@ const ForgotPassword = () => {
                 Reset Password
               </Typography>
             </Box>
-
-            {message && (
-              <Fade in={true}>
-                <Alert severity="success" className="resetAlert">
-                  {message}
-                </Alert>
-              </Fade>
-            )}
-
-            {error && (
-              <Fade in={true}>
-                <Alert severity="error" className="resetAlert">
-                  {error}
-                </Alert>
-              </Fade>
-            )}
 
             <form onSubmit={handleSubmit} noValidate>
               <TextField

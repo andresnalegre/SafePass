@@ -6,44 +6,37 @@ import {
   Typography,
   TextField,
   Button,
-  Alert,
-  Fade,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Fade
 } from '@mui/material';
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import '../styles/styles.css';
 
-const Register = () => {
+const Register = ({ notificationsRef }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username) {
-      setError('Please enter a username');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Please enter a username', 'error');
       return;
     }
     if (!password) {
-      setError('Please enter a password');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Please enter a password', 'error');
       return;
     }
     if (!confirmPassword) {
-      setError('Please confirm your password');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Please confirm your password', 'error');
       return;
     }
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Passwords do not match', 'error');
       return;
     }
     try {
@@ -60,18 +53,15 @@ const Register = () => {
 
       const data = await response.json();
       if (data.success) {
-        setMessage(data.message);
-        setError(null);
+        notificationsRef.current.showSnackbar(data.message, 'success');
         setTimeout(() => {
-          navigate('/');
+          navigate('/login');
         }, 2000);
       } else {
-        setError(data.message);
-        setMessage(null);
+        notificationsRef.current.showSnackbar(data.message, 'error');
       }
     } catch (err) {
-      setError('Error connecting to server');
-      setMessage(null);
+      notificationsRef.current.showSnackbar('Error connecting to server', 'error');
     }
   };
 
@@ -96,22 +86,6 @@ const Register = () => {
                 Register
               </Typography>
             </Box>
-
-            {message && (
-              <Fade in={true}>
-                <Alert severity="success" className="registerAlert">
-                  {message}
-                </Alert>
-              </Fade>
-            )}
-
-            {error && (
-              <Fade in={true}>
-                <Alert severity="error" className="registerAlert">
-                  {error}
-                </Alert>
-              </Fade>
-            )}
 
             <form onSubmit={handleSubmit} noValidate>
               <TextField

@@ -2,12 +2,17 @@
     "name": "safepass-root",
     "version": "1.0.0",
     "scripts": {
+        "setup": "npm install && cd frontend && npm install",
         "prestart": "php backend/initdb.php",
-        "start": "concurrently \"php -S localhost:8000 -t backend\" \"cd frontend && npm start\"",
+        "start": "npm run setup && concurrently \"php -S localhost:8000 -t backend\" \"cd frontend && npm start\"",
         "build": "cd frontend && npm run build",
-        "test": "cd frontend && npm test"
+        "test": "cd frontend && npm test",
+        "clean": "rm -rf node_modules frontend/node_modules package-lock.json frontend/package-lock.json"
     },
     "devDependencies": {
         "concurrently": "^7.6.0"
+    },
+    "dependencies": {
+        "@mui/styles": "^6.4.8"
     }
 }

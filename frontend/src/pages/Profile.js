@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Paper, Box, TextField, Button, Avatar, Grid, Alert, IconButton } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import { PhotoCamera, Delete } from '@mui/icons-material';
+import { Container, Typography, Paper, Box, TextField, Button, Avatar, Grid, IconButton } from '@mui/material';
+import { PhotoCamera, Delete, ArrowBack } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import '../styles/styles.css';
 
-const Profile = () => {
-  const { enqueueSnackbar } = useSnackbar();
+const Profile = ({ notificationsRef }) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [user, setUser] = useState({
     user: '',
     avatarUrl: '',
@@ -17,22 +17,32 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const checkAuthentication = () => {
+      const userId = localStorage.getItem('user_id');
+      if (!userId) {
+        notificationsRef.current.showSnackbar('User not logged in', 'error');
+        navigate('/login');
+        return;
+      }
+      fetchUserData(userId);
+    };
+
+    const fetchUserData = async (userId) => {
       try {
-        const response = await fetch('http://localhost:8000/profile.php?user_id=1');
+        const response = await fetch(`http://localhost:8000/profile.php?user_id=${userId}`);
         const data = await response.json();
         if (data.success) {
           setUser(data.user);
         } else {
-          setError(data.message || 'Failed to fetch user data');
+          notificationsRef.current.showSnackbar(data.message || 'Failed to fetch user data', 'error');
         }
       } catch (err) {
-        setError('Error fetching user data');
+        notificationsRef.current.showSnackbar('Error fetching user data', 'error');
       }
     };
 
-    fetchUserData();
-  }, []);
+    checkAuthentication();
+  }, [navigate, notificationsRef]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,10 +55,16 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      notificationsRef.current.showSnackbar('Passwords do not match', 'error');
+      setLoading(false);
+      return;
+    }
+
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+      notificationsRef.current.showSnackbar('User not logged in', 'error');
       setLoading(false);
       return;
     }
@@ -60,22 +76,20 @@ const Profile = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: 1,
+          user_id: userId,
           password: formData.password,
         }),
       });
 
       const data = await response.json();
       if (data.success) {
-        enqueueSnackbar('Password updated successfully', { variant: 'success' });
+        notificationsRef.current.showSnackbar('Password updated successfully', 'success');
         setFormData({ password: '', confirmPassword: '' });
       } else {
-        setError(data.message || 'Failed to update password');
-        enqueueSnackbar(data.message || 'Failed to update password', { variant: 'error' });
+        notificationsRef.current.showSnackbar(data.message || 'Failed to update password', 'error');
       }
     } catch (err) {
-      setError('Error updating password');
-      enqueueSnackbar('Error updating password', { variant: 'error' });
+      notificationsRef.current.showSnackbar('Error updating password', 'error');
     } finally {
       setLoading(false);
     }
@@ -84,80 +98,93 @@ const Profile = () => {
   const handleUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-  
+
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+      notificationsRef.current.showSnackbar('User not logged in', 'error');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('avatar', file);
-    formData.append('user_id', 1);
-  
+    formData.append('user_id', userId);
+
     try {
       const response = await fetch('http://localhost:8000/profile.php', {
         method: 'POST',
         body: formData,
       });
-  
+
       const data = await response.json();
       if (data.success) {
-        const userResponse = await fetch('http://localhost:8000/profile.php?user_id=1');
+        const userResponse = await fetch(`http://localhost:8000/profile.php?user_id=${userId}`);
         const userData = await userResponse.json();
         if (userData.success) {
           setUser(userData.user);
         }
-        enqueueSnackbar('Avatar uploaded successfully', { variant: 'success' });
+        notificationsRef.current.showSnackbar('Avatar uploaded successfully', 'success');
       } else {
-        enqueueSnackbar(data.message || 'Failed to upload avatar', { variant: 'error' });
+        notificationsRef.current.showSnackbar(data.message || 'Failed to upload avatar', 'error');
       }
     } catch (err) {
-      enqueueSnackbar('Error uploading avatar', { variant: 'error' });
+      notificationsRef.current.showSnackbar('Error uploading avatar', 'error');
     }
   };
 
   const handleRemove = async () => {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+      notificationsRef.current.showSnackbar('User not logged in', 'error');
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:8000/profile.php?user_id=1', {
+      const response = await fetch(`http://localhost:8000/profile.php?user_id=${userId}`, {
         method: 'DELETE',
       });
 
       const data = await response.json();
       if (data.success) {
         setUser((prev) => ({ ...prev, avatarUrl: '' }));
-        enqueueSnackbar('Avatar removed successfully', { variant: 'info' });
+        notificationsRef.current.showSnackbar('Avatar removed successfully', 'info');
       } else {
-        enqueueSnackbar(data.message || 'Failed to remove avatar', { variant: 'error' });
+        notificationsRef.current.showSnackbar(data.message || 'Failed to remove avatar', 'error');
       }
     } catch (err) {
-      enqueueSnackbar('Error removing avatar', { variant: 'error' });
+      notificationsRef.current.showSnackbar('Error removing avatar', 'error');
     }
   };
 
+  const handleBackClick = () => {
+    navigate('/dashboard');
+  };
+
   return (
-    <Container maxWidth="sm" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Paper elevation={2} sx={{ p: 3, textAlign: 'center' }}>
+    <Container maxWidth="sm" className="container">
+      <Paper elevation={2} className="paper">
+        <IconButton
+          onClick={handleBackClick}
+          color="primary"
+          className="backButton"
+        >
+          <ArrowBack />
+        </IconButton>
+
         <Typography variant="h5" component="h1" mb={2}>
           Profile
         </Typography>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
-
+        <Box component="form" onSubmit={handleSubmit} className="form">
           <Grid container spacing={3}>
             <Grid item xs={12} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
               <Avatar
-                sx={{
-                  width: 100,
-                  height: 100,
-                  fontSize: '2.5rem',
-                  bgcolor: 'primary.main',
-                }}
+                className="avatar"
                 src={user.avatarUrl}
                 alt={user.user}
               >
                 {user.user ? user.user[0].toUpperCase() : ''}
               </Avatar>
-              <Box mt={1}>
+              <Box className="iconButton">
                 <IconButton color="primary" component="label">
                   <input hidden accept="image/*" type="file" onChange={handleUpload} />
                   <PhotoCamera />
@@ -175,6 +202,9 @@ const Profile = () => {
                 name="username"
                 value={user.user}
                 disabled
+                InputLabelProps={{
+                  className: 'textFieldLabel',
+                }}
               />
             </Grid>
 
@@ -211,12 +241,6 @@ const Profile = () => {
               </Button>
             </Grid>
           </Grid>
-        </Box>
-
-        <Box mt={3}>
-          <Typography variant="body2" color="textSecondary">
-            © {new Date().getFullYear()} SafePass. All rights reserved.
-          </Typography>
         </Box>
       </Paper>
     </Container>
