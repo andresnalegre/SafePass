@@ -7,9 +7,30 @@ header("Content-Type: application/json");
 
 include_once 'database.php';
 
+// Centralize as mensagens de erro e sucesso
+const MESSAGES = [
+    'enterCredentials' => 'Enter your username and password.',
+    'enterUsername' => 'Enter your username.',
+    'enterPassword' => 'Enter your password.',
+    'loginSuccess' => 'Welcome, ',
+    'invalidCredentials' => 'Username or password is incorrect!',
+    'serverError' => 'Error connecting to server.'
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if (empty($username) && empty($password)) {
+        echo json_encode(['success' => false, 'message' => MESSAGES['enterCredentials']]);
+        exit;
+    } elseif (empty($username)) {
+        echo json_encode(['success' => false, 'message' => MESSAGES['enterUsername']]);
+        exit;
+    } elseif (empty($password)) {
+        echo json_encode(['success' => false, 'message' => MESSAGES['enterPassword']]);
+        exit;
+    }
 
     try {
         $db = Database::getInstance();
@@ -25,17 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $user['user'];
                 echo json_encode([
                     'success' => true,
-                    'message' => "Welcome to SafePass, {$user['user']}.",
+                    'message' => MESSAGES['loginSuccess'] . $user['user'] . '!',
                     'user_id' => $user['id']
                 ]);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
+                echo json_encode(['success' => false, 'message' => MESSAGES['invalidCredentials']]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
+            echo json_encode(['success' => false, 'message' => MESSAGES['invalidCredentials']]);
         }
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Server error.']);
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => MESSAGES['serverError']]);
     }
 }
 ?>

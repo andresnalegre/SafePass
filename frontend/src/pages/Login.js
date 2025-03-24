@@ -22,6 +22,13 @@ const Login = ({ notificationsRef }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Centralize as mensagens de erro e sucesso
+  const errorMessages = {
+    loginSuccess: 'Login successful!',
+    invalidCredentials: 'Invalid credentials',
+    serverError: 'Error connecting to the server.',
+  };
+
   useEffect(() => {
     if (location.state?.logoutMessage) {
       notificationsRef.current.showSnackbar(location.state.logoutMessage, 'success');
@@ -44,21 +51,21 @@ const Login = ({ notificationsRef }) => {
       });
   
       const data = await response.json();
-        if (data.success) {
-          localStorage.setItem('user_id', data.user_id);
-          localStorage.setItem('username', username);
+      if (data.success) {
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('username', username);
 
-          notificationsRef.current.showSnackbar('Login successful!', 'success');
+        notificationsRef.current.showSnackbar(errorMessages.loginSuccess, 'success');
 
-          setTimeout(() => {
-            notificationsRef.current.showSnackbar(data.message, 'success');
-            navigate('/');
-          }, 1000);
-        } else {
-          notificationsRef.current.showSnackbar(data.message || 'Invalid credentials', 'error');
-        }
+        setTimeout(() => {
+          notificationsRef.current.showSnackbar(data.message, 'success');
+          navigate('/');
+        }, 1000);
+      } else {
+        notificationsRef.current.showSnackbar(data.message || errorMessages.invalidCredentials, 'error');
+      }
     } catch (error) {
-      notificationsRef.current.showSnackbar('Error connecting to the server.', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.serverError, 'error');
     }
   };
 
