@@ -7,12 +7,11 @@ header("Content-Type: application/json");
 
 include_once 'database.php';
 
-// Centralize as mensagens de erro e sucesso
 const MESSAGES = [
     'enterCredentials' => 'Enter your username and password.',
     'enterUsername' => 'Enter your username.',
     'enterPassword' => 'Enter your password.',
-    'loginSuccess' => 'Welcome, ',
+    'loginSuccess' => 'Welcome to SafePass, ',
     'invalidCredentials' => 'Username or password is incorrect!',
     'serverError' => 'Error connecting to server.'
 ];
@@ -46,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $user['user'];
                 echo json_encode([
                     'success' => true,
-                    'message' => MESSAGES['loginSuccess'] . $user['user'] . '!',
+                    'message' => MESSAGES['loginSuccess'] . $user['user'] . '.',
                     'user_id' => $user['id']
                 ]);
             } else {

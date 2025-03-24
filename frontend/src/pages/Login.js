@@ -22,7 +22,6 @@ const Login = ({ notificationsRef }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Centralize as mensagens de erro e sucesso
   const errorMessages = {
     loginSuccess: 'Login successful!',
     invalidCredentials: 'Invalid credentials',

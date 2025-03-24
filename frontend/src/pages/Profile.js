@@ -16,11 +16,24 @@ const Profile = ({ notificationsRef }) => {
     confirmPassword: '',
   });
 
+  const messages = {
+    userNotLoggedIn: 'User not logged in',
+    fetchUserDataError: 'Failed to fetch user data',
+    passwordsMismatch: 'Passwords do not match',
+    passwordUpdateSuccess: 'Password updated successfully',
+    passwordUpdateError: 'Failed to update password',
+    avatarUploadSuccess: 'Avatar uploaded successfully',
+    avatarUploadError: 'Failed to upload avatar',
+    avatarRemoveSuccess: 'Avatar removed successfully',
+    avatarRemoveError: 'Failed to remove avatar',
+    serverError: 'Error connecting to server',
+  };
+
   useEffect(() => {
     const checkAuthentication = () => {
       const userId = localStorage.getItem('user_id');
       if (!userId) {
-        notificationsRef.current.showSnackbar('User not logged in', 'error');
+        notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
         navigate('/login');
         return;
       }
@@ -34,15 +47,15 @@ const Profile = ({ notificationsRef }) => {
         if (data.success) {
           setUser(data.user);
         } else {
-          notificationsRef.current.showSnackbar(data.message || 'Failed to fetch user data', 'error');
+          notificationsRef.current.showSnackbar(data.message || messages.fetchUserDataError, 'error');
         }
       } catch (err) {
-        notificationsRef.current.showSnackbar('Error fetching user data', 'error');
+        notificationsRef.current.showSnackbar(messages.serverError, 'error');
       }
     };
 
     checkAuthentication();
-  }, [navigate, notificationsRef]);
+  }, [navigate, notificationsRef, messages.userNotLoggedIn, messages.fetchUserDataError, messages.serverError]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,14 +70,14 @@ const Profile = ({ notificationsRef }) => {
     setLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
-      notificationsRef.current.showSnackbar('Passwords do not match', 'error');
+      notificationsRef.current.showSnackbar(messages.passwordsMismatch, 'error');
       setLoading(false);
       return;
     }
 
     const userId = localStorage.getItem('user_id');
     if (!userId) {
-      notificationsRef.current.showSnackbar('User not logged in', 'error');
+      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
       setLoading(false);
       return;
     }
@@ -83,13 +96,13 @@ const Profile = ({ notificationsRef }) => {
 
       const data = await response.json();
       if (data.success) {
-        notificationsRef.current.showSnackbar('Password updated successfully', 'success');
+        notificationsRef.current.showSnackbar(messages.passwordUpdateSuccess, 'success');
         setFormData({ password: '', confirmPassword: '' });
       } else {
-        notificationsRef.current.showSnackbar(data.message || 'Failed to update password', 'error');
+        notificationsRef.current.showSnackbar(data.message || messages.passwordUpdateError, 'error');
       }
     } catch (err) {
-      notificationsRef.current.showSnackbar('Error updating password', 'error');
+      notificationsRef.current.showSnackbar(messages.serverError, 'error');
     } finally {
       setLoading(false);
     }
@@ -101,7 +114,7 @@ const Profile = ({ notificationsRef }) => {
 
     const userId = localStorage.getItem('user_id');
     if (!userId) {
-      notificationsRef.current.showSnackbar('User not logged in', 'error');
+      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
       return;
     }
 
@@ -122,19 +135,19 @@ const Profile = ({ notificationsRef }) => {
         if (userData.success) {
           setUser(userData.user);
         }
-        notificationsRef.current.showSnackbar('Avatar uploaded successfully', 'success');
+        notificationsRef.current.showSnackbar(messages.avatarUploadSuccess, 'success');
       } else {
-        notificationsRef.current.showSnackbar(data.message || 'Failed to upload avatar', 'error');
+        notificationsRef.current.showSnackbar(data.message || messages.avatarUploadError, 'error');
       }
     } catch (err) {
-      notificationsRef.current.showSnackbar('Error uploading avatar', 'error');
+      notificationsRef.current.showSnackbar(messages.serverError, 'error');
     }
   };
 
   const handleRemove = async () => {
     const userId = localStorage.getItem('user_id');
     if (!userId) {
-      notificationsRef.current.showSnackbar('User not logged in', 'error');
+      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
       return;
     }
 
@@ -146,12 +159,12 @@ const Profile = ({ notificationsRef }) => {
       const data = await response.json();
       if (data.success) {
         setUser((prev) => ({ ...prev, avatarUrl: '' }));
-        notificationsRef.current.showSnackbar('Avatar removed successfully', 'info');
+        notificationsRef.current.showSnackbar(messages.avatarRemoveSuccess, 'info');
       } else {
-        notificationsRef.current.showSnackbar(data.message || 'Failed to remove avatar', 'error');
+        notificationsRef.current.showSnackbar(data.message || messages.avatarRemoveError, 'error');
       }
     } catch (err) {
-      notificationsRef.current.showSnackbar('Error removing avatar', 'error');
+      notificationsRef.current.showSnackbar(messages.serverError, 'error');
     }
   };
 

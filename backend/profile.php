@@ -6,6 +6,23 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once 'database.php';
 
+const MESSAGES = [
+    'userNotFound' => 'User was not found!',
+    'fetchProfileError' => 'Error fetching profile',
+    'fileTypeNotAllowed' => 'File type not allowed!',
+    'fileTooLarge' => 'File is too large!',
+    'uploadFailed' => 'Upload has failed!',
+    'uploadError' => 'Upload error',
+    'avatarRemoved' => 'Avatar removed successfully',
+    'avatarNotFound' => 'Avatar not found',
+    'removeAvatarError' => 'Error removing avatar',
+    'passwordUpdated' => 'Password updated',
+    'updatePasswordError' => 'Failed to update password',
+    'userIdNotProvided' => 'User ID not provided',
+    'invalidData' => 'Invalid data',
+    'serverError' => 'Server error: '
+];
+
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
@@ -25,10 +42,10 @@ try {
                 return ['success' => true, 'user' => $user];
             }
             
-            return ['success' => false, 'message' => 'User not found'];
+            return ['success' => false, 'message' => MESSAGES['userNotFound']];
         } catch (PDOException $e) {
             error_log("Error fetching profile: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error fetching profile'];
+            return ['success' => false, 'message' => MESSAGES['fetchProfileError']];
         }
     }
 
@@ -46,11 +63,11 @@ try {
 
             $allowTypes = ['jpg', 'jpeg', 'png', 'gif'];
             if (!in_array($fileType, $allowTypes)) {
-                return ['success' => false, 'message' => 'File type not allowed'];
+                return ['success' => false, 'message' => MESSAGES['fileTypeNotAllowed']];
             }
 
             if ($file['size'] > 5 * 1024 * 1024) {
-                return ['success' => false, 'message' => 'File too large'];
+                return ['success' => false, 'message' => MESSAGES['fileTooLarge']];
             }
 
             if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
@@ -65,10 +82,10 @@ try {
                 ];
             }
 
-            return ['success' => false, 'message' => 'Upload failed'];
+            return ['success' => false, 'message' => MESSAGES['uploadFailed']];
         } catch (PDOException $e) {
             error_log("Upload error: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Upload error'];
+            return ['success' => false, 'message' => MESSAGES['uploadError']];
         }
     }
 
@@ -90,13 +107,13 @@ try {
                 $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
                 $stmt->execute();
 
-                return ['success' => true, 'message' => 'Avatar removed successfully'];
+                return ['success' => true, 'message' => MESSAGES['avatarRemoved']];
             }
 
-            return ['success' => false, 'message' => 'Avatar not found'];
+            return ['success' => false, 'message' => MESSAGES['avatarNotFound']];
         } catch (PDOException $e) {
             error_log("Error removing avatar: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error removing avatar'];
+            return ['success' => false, 'message' => MESSAGES['removeAvatarError']];
         }
     }
 
@@ -110,10 +127,10 @@ try {
             
             $stmt->execute();
             
-            return ['success' => true, 'message' => 'Password updated'];
+            return ['success' => true, 'message' => MESSAGES['passwordUpdated']];
         } catch (PDOException $e) {
             error_log("Error updating password: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Failed to update password'];
+            return ['success' => false, 'message' => MESSAGES['updatePasswordError']];
         }
     }
 
@@ -122,7 +139,7 @@ try {
         if ($userId) {
             echo json_encode(getUserProfile($conn, $userId));
         } else {
-            echo json_encode(['success' => false, 'message' => 'User ID not provided']);
+            echo json_encode(['success' => false, 'message' => MESSAGES['userIdNotProvided']]);
         }
     }
 
@@ -135,10 +152,10 @@ try {
             if ($userId) {
                 echo json_encode(uploadAvatar($conn, $userId, $_FILES['avatar']));
             } else {
-                echo json_encode(['success' => false, 'message' => 'User ID not provided']);
+                echo json_encode(['success' => false, 'message' => MESSAGES['userIdNotProvided']]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid data']);
+            echo json_encode(['success' => false, 'message' => MESSAGES['invalidData']]);
         }
     }
 
@@ -148,7 +165,7 @@ try {
         if ($userId) {
             echo json_encode(removeAvatar($conn, $userId));
         } else {
-            echo json_encode(['success' => false, 'message' => 'User ID not provided']);
+            echo json_encode(['success' => false, 'message' => MESSAGES['userIdNotProvided']]);
         }
     }
     
@@ -156,7 +173,7 @@ try {
     error_log("General error: " . $e->getMessage());
     echo json_encode([
         'success' => false, 
-        'message' => 'Server error: ' . $e->getMessage()
+        'message' => MESSAGES['serverError'] . $e->getMessage()
     ]);
 }
 ?>
