@@ -28,7 +28,7 @@ const About = ({ notificationsRef }) => {
       const storedUserName = localStorage.getItem('username');
       
       if (!storedUserName) {
-        notificationsRef.current.showSnackbar('User not logged in', 'error');
+        notificationsRef.current.showSnackbar('User not logged', 'error');
         navigate('/login');
       }
     };

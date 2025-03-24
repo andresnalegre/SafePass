@@ -47,7 +47,7 @@ const Dashboard = ({ notificationsRef }) => {
   const navigate = useNavigate();
 
   const messages = {
-    userNotLoggedIn: 'User not logged in',
+    userNotLoggedIn: 'User not logged',
     fetchDataError: 'Failed to fetch data',
     fetchDataSuccess: 'Passwords found.',
     fetchDataNoPasswords: 'No passwords found.',

@@ -17,7 +17,7 @@ const Profile = ({ notificationsRef }) => {
   });
 
   const messages = {
-    userNotLoggedIn: 'User not logged in',
+    userNotLoggedIn: 'User not logged',
     fetchUserDataError: 'Failed to fetch user data',
     passwordsMismatch: 'Passwords do not match',
     passwordUpdateSuccess: 'Password updated successfully',
