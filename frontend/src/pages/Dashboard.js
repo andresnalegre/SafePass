@@ -46,12 +46,27 @@ const Dashboard = ({ notificationsRef }) => {
   const [userName, setUserName] = useState('');
   const navigate = useNavigate();
 
+  const messages = {
+    userNotLoggedIn: 'User not logged in',
+    fetchDataError: 'Failed to fetch data',
+    fetchDataSuccess: 'Passwords found.',
+    fetchDataNoPasswords: 'No passwords found.',
+    copyPasswordSuccess: 'Password copied to clipboard',
+    copyPasswordError: 'Failed to copy password',
+    deletePasswordSuccess: 'Password deleted successfully',
+    deletePasswordError: 'Failed to delete password',
+    savePasswordSuccess: 'Password saved successfully',
+    savePasswordError: 'Failed to save password',
+    serverError: 'Error connecting to server',
+    allFieldsRequired: 'All fields are required',
+  };
+
   useEffect(() => {
     const checkAuthentication = async () => {
       const storedUserName = localStorage.getItem('username');
       
       if (!storedUserName) {
-        notificationsRef.current.showSnackbar('User not logged in', 'error');
+        notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
         navigate('/login');
         return;
       }
@@ -65,17 +80,17 @@ const Dashboard = ({ notificationsRef }) => {
         if (data.success) {
           setPasswords(data.passwords);
         } else {
-          notificationsRef.current.showSnackbar(data.message || 'Failed to fetch data', 'error');
+          notificationsRef.current.showSnackbar(data.message || messages.fetchDataError, 'error');
           navigate('/login');
         }
       } catch (error) {
-        notificationsRef.current.showSnackbar('Error fetching data', 'error');
+        notificationsRef.current.showSnackbar(messages.serverError, 'error');
         navigate('/login');
       }
     };
 
     checkAuthentication();
-  }, [navigate, notificationsRef]);
+  }, [navigate, notificationsRef, messages.userNotLoggedIn, messages.fetchDataError, messages.serverError]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -84,9 +99,9 @@ const Dashboard = ({ notificationsRef }) => {
   const handleCopyPassword = async (password) => {
     try {
       await navigator.clipboard.writeText(password);
-      notificationsRef.current.showSnackbar('Password copied to clipboard', 'success');
+      notificationsRef.current.showSnackbar(messages.copyPasswordSuccess, 'success');
     } catch (err) {
-      notificationsRef.current.showSnackbar('Failed to copy password', 'error');
+      notificationsRef.current.showSnackbar(messages.copyPasswordError, 'error');
     }
   };
 
@@ -111,12 +126,12 @@ const Dashboard = ({ notificationsRef }) => {
 
       if (data.success) {
         setPasswords((prev) => prev.filter((p) => p.id !== passwordId));
-        notificationsRef.current.showSnackbar(data.message || 'Password deleted successfully', 'success');
+        notificationsRef.current.showSnackbar(data.message || messages.deletePasswordSuccess, 'success');
       } else {
-        notificationsRef.current.showSnackbar(data.message || 'Failed to delete password', 'error');
+        notificationsRef.current.showSnackbar(data.message || messages.deletePasswordError, 'error');
       }
     } catch (error) {
-      notificationsRef.current.showSnackbar('Error deleting password', 'error');
+      notificationsRef.current.showSnackbar(messages.serverError, 'error');
     }
   };
 
@@ -136,7 +151,7 @@ const Dashboard = ({ notificationsRef }) => {
 
   const handleSavePassword = async () => {
     if (!newPassword.title || !newPassword.username || !newPassword.password) {
-      notificationsRef.current.showSnackbar('All fields are required', 'warning');
+      notificationsRef.current.showSnackbar(messages.allFieldsRequired, 'warning');
       return;
     }
   
@@ -168,7 +183,7 @@ const Dashboard = ({ notificationsRef }) => {
           setPasswords((prev) =>
             prev.map((p) => (p.id === editingPassword.id ? { ...newPassword, id: p.id } : p))
           );
-          notificationsRef.current.showSnackbar(data.message || 'Password updated successfully', 'success');
+          notificationsRef.current.showSnackbar(data.message || messages.savePasswordSuccess, 'success');
         } else {
           const newEntry = { 
             ...newPassword, 
@@ -176,17 +191,17 @@ const Dashboard = ({ notificationsRef }) => {
             created_by: userName 
           };
           setPasswords((prev) => [...prev, newEntry]);
-          notificationsRef.current.showSnackbar(data.message || 'Password added successfully', 'success');
+          notificationsRef.current.showSnackbar(data.message || messages.savePasswordSuccess, 'success');
         }
         
         setDialogOpen(false);
         setEditingPassword(null);
         setIsSaveEnabled(false);
       } else {
-        notificationsRef.current.showSnackbar(data.message || 'Failed to save password', 'error');
+        notificationsRef.current.showSnackbar(data.message || messages.savePasswordError, 'error');
       }
     } catch (error) {
-      notificationsRef.current.showSnackbar('Error saving password', 'error');
+      notificationsRef.current.showSnackbar(messages.serverError, 'error');
     }
   };
 

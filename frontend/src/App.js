@@ -14,11 +14,7 @@ function App() {
   const notificationsRef = useRef();
 
   const WithFooter = ({ children }) => (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      minHeight: '100vh' 
-    }}>
+    <div>
       {children}
       <Footer />
     </div>
