@@ -23,17 +23,17 @@ try {
             
             $passwords = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            return ['success' => true, 'passwords' => $passwords ?: [], 'message' => $passwords ? '' : 'No passwords found'];
+            return ['success' => true, 'passwords' => $passwords ?: [], 'message' => $passwords ? 'Passwords found.' : 'No passwords found.'];
         } catch (PDOException $e) {
             error_log("Error fetching passwords: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error fetching passwords'];
+            return ['success' => false, 'message' => 'Error fetching passwords.'];
         }
     }
 
     function createPassword($conn, $data) {
         try {
             if (empty($data['title']) || empty($data['username']) || empty($data['password']) || empty($data['created_by'])) {
-                return ['success' => false, 'message' => 'All fields are required'];
+                return ['success' => false, 'message' => 'All fields are required.'];
             }
 
             $stmt = $conn->prepare("INSERT INTO dashboard (title, username, password, created_by) VALUES (:title, :username, :password, :created_by)");
@@ -45,19 +45,19 @@ try {
 
             return [
                 'success' => true, 
-                'message' => 'Password created successfully', 
+                'message' => 'Password created.', 
                 'id' => $conn->lastInsertId()
             ];
         } catch (PDOException $e) {
             error_log("Error creating password: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error creating password'];
+            return ['success' => false, 'message' => 'Error creating password.'];
         }
     }
 
     function updatePassword($conn, $id, $data) {
         try {
             if (empty($data['title']) || empty($data['username']) || empty($data['password'])) {
-                return ['success' => false, 'message' => 'All fields are required'];
+                return ['success' => false, 'message' => 'All fields are required.'];
             }
 
             $stmt = $conn->prepare("UPDATE dashboard SET title = :title, username = :username, password = :password WHERE id = :id");
@@ -67,10 +67,10 @@ try {
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
 
-            return ['success' => true, 'message' => 'Password updated successfully'];
+            return ['success' => true, 'message' => 'Password updated.'];
         } catch (PDOException $e) {
             error_log("Error updating password: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error updating password'];
+            return ['success' => false, 'message' => 'Error updating password.'];
         }
     }
 
@@ -83,14 +83,14 @@ try {
 
             if ($stmt->rowCount() > 0) {
                 error_log("Password deleted successfully.");
-                return ['success' => true, 'message' => 'Password deleted successfully'];
+                return ['success' => true, 'message' => 'Password deleted.'];
             } else {
                 error_log("No password found with ID: " . $id);
-                return ['success' => false, 'message' => 'No password found with the given ID'];
+                return ['success' => false, 'message' => 'No password found with the given ID.'];
             }
         } catch (PDOException $e) {
             error_log("Error deleting password: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error deleting password'];
+            return ['success' => false, 'message' => 'Error deleting password.'];
         }
     }
 
@@ -100,7 +100,7 @@ try {
             if ($username) {
                 echo json_encode(getPasswords($conn, $username));
             } else {
-                echo json_encode(['success' => false, 'message' => 'Username not provided']);
+                echo json_encode(['success' => false, 'message' => 'Username not provided.']);
             }
             break;
 
@@ -109,7 +109,7 @@ try {
             if (isset($input['title'], $input['username'], $input['password'], $input['created_by'])) {
                 echo json_encode(createPassword($conn, $input));
             } else {
-                echo json_encode(['success' => false, 'message' => 'Invalid data']);
+                echo json_encode(['success' => false, 'message' => 'Invalid data.']);
             }
             break;
 
@@ -119,7 +119,7 @@ try {
             if ($id && isset($input['title'], $input['username'], $input['password'])) {
                 echo json_encode(updatePassword($conn, $id, $input));
             } else {
-                echo json_encode(['success' => false, 'message' => 'Invalid data for update']);
+                echo json_encode(['success' => false, 'message' => 'Invalid data for update.']);
             }
             break;
 
@@ -129,13 +129,13 @@ try {
             if ($id) {
                 echo json_encode(deletePassword($conn, $id));
             } else {
-                echo json_encode(['success' => false, 'message' => 'ID not provided']);
+                echo json_encode(['success' => false, 'message' => 'ID not provided.']);
             }
             break;
 
         default:
             http_response_code(405);
-            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
             break;
     }
     
@@ -144,7 +144,7 @@ try {
     http_response_code(500);
     echo json_encode([
         'success' => false, 
-        'message' => 'Server error: ' . $e->getMessage()
+        'message' => 'Server error.'
     ]);
 }
 ?>

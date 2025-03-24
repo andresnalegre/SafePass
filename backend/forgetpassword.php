@@ -6,6 +6,12 @@ header("Content-Type: application/json");
 
 include_once 'database.php';
 
+const MESSAGES = [
+    'userNotFound' => 'User was not found! Please check the username and try again.',
+    'passwordUpdated' => 'Password updated successfully!',
+    'serverError' => 'Error connecting to server.'
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $newPassword = $_POST['newPassword'];
@@ -21,12 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("UPDATE users SET password = :password WHERE user = :username");
             $stmt->execute(['password' => $hashedPassword, 'username' => $username]);
-            echo json_encode(['success' => true, 'message' => 'Password updated successfully']);
+            echo json_encode(['success' => true, 'message' => MESSAGES['passwordUpdated']]);
         } else {
-            echo json_encode(['success' => false, 'message' => 'User not found']);
+            echo json_encode(['success' => false, 'message' => MESSAGES['userNotFound']]);
         }
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => MESSAGES['serverError']]);
     }
 }
 ?>

@@ -21,22 +21,30 @@ const Register = ({ notificationsRef }) => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const errorMessages = {
+    usernameRequired: 'Please enter a username',
+    passwordRequired: 'Please enter a password',
+    confirmPasswordRequired: 'Please confirm your password',
+    passwordsMismatch: 'Passwords do not match',
+    serverError: 'Error connecting to server',
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username) {
-      notificationsRef.current.showSnackbar('Please enter a username', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.usernameRequired, 'error');
       return;
     }
     if (!password) {
-      notificationsRef.current.showSnackbar('Please enter a password', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.passwordRequired, 'error');
       return;
     }
     if (!confirmPassword) {
-      notificationsRef.current.showSnackbar('Please confirm your password', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.confirmPasswordRequired, 'error');
       return;
     }
     if (password !== confirmPassword) {
-      notificationsRef.current.showSnackbar('Passwords do not match', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.passwordsMismatch, 'error');
       return;
     }
     try {
@@ -61,7 +69,7 @@ const Register = ({ notificationsRef }) => {
         notificationsRef.current.showSnackbar(data.message, 'error');
       }
     } catch (err) {
-      notificationsRef.current.showSnackbar('Error connecting to server', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.serverError, 'error');
     }
   };
 

@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $user['user'];
                 echo json_encode([
                     'success' => true,
-                    'message' => 'Login successful',
+                    'message' => "Welcome to SafePass, {$user['user']}.",
                     'user_id' => $user['id']
                 ]);
             } else {
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
         }
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        echo json_encode(['success' => false, 'message' => 'Server error.']);
     }
 }
 ?>

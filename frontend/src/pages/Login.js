@@ -44,14 +44,19 @@ const Login = ({ notificationsRef }) => {
       });
   
       const data = await response.json();
-      if (data.success) {
-        localStorage.setItem('user_id', data.user_id);
-        localStorage.setItem('username', username);
-        notificationsRef.current.showSnackbar('Login successful!', 'success');
-        navigate('/');
-      } else {
-        notificationsRef.current.showSnackbar(data.message || 'Invalid credentials', 'error');
-      }
+        if (data.success) {
+          localStorage.setItem('user_id', data.user_id);
+          localStorage.setItem('username', username);
+
+          notificationsRef.current.showSnackbar('Login successful!', 'success');
+
+          setTimeout(() => {
+            notificationsRef.current.showSnackbar(data.message, 'success');
+            navigate('/');
+          }, 1000);
+        } else {
+          notificationsRef.current.showSnackbar(data.message || 'Invalid credentials', 'error');
+        }
     } catch (error) {
       notificationsRef.current.showSnackbar('Error connecting to the server.', 'error');
     }
@@ -130,10 +135,10 @@ const Login = ({ notificationsRef }) => {
 
             <SafeBox className="safeLinkContainer">
               <SafeLink component={RouterLink} to="/register" variant="body2" className="safeLink">
-                Don't have an account? Sign Up
+                Sign Up 
               </SafeLink>
               <SafeLink component={RouterLink} to="/forgot-password" variant="body2" className="safeLink">
-                Forgot password?
+                Forgot Password?
               </SafeLink>
             </SafeBox>
           </form>

@@ -21,26 +21,34 @@ const ForgotPassword = ({ notificationsRef }) => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const errorMessages = {
+    usernameRequired: 'Please enter a username',
+    newPasswordRequired: 'Please enter a new password',
+    confirmPasswordRequired: 'Please confirm your password',
+    passwordsMismatch: 'Passwords do not match',
+    serverError: 'Error connecting to server',
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!username) {
-      notificationsRef.current.showSnackbar('Please enter a username', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.usernameRequired, 'error');
       return;
     }
 
     if (!newPassword) {
-      notificationsRef.current.showSnackbar('Please enter a new password', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.newPasswordRequired, 'error');
       return;
     }
 
     if (!confirmPassword) {
-      notificationsRef.current.showSnackbar('Please confirm your password', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.confirmPasswordRequired, 'error');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      notificationsRef.current.showSnackbar('Passwords do not match', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.passwordsMismatch, 'error');
       return;
     }
 
@@ -60,13 +68,13 @@ const ForgotPassword = ({ notificationsRef }) => {
       if (data.success) {
         notificationsRef.current.showSnackbar(data.message, 'success');
         setTimeout(() => {
-          navigate('/');
+          navigate('/login');
         }, 2000);
       } else {
         notificationsRef.current.showSnackbar(data.message, 'error');
       }
     } catch (err) {
-      notificationsRef.current.showSnackbar('Error connecting to server', 'error');
+      notificationsRef.current.showSnackbar(errorMessages.serverError, 'error');
     }
   };
 
