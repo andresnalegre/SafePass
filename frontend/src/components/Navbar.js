@@ -22,7 +22,7 @@ const Navbar = () => {
 
   const getPageTitle = () => {
     switch (location.pathname) {
-      case '/dashboard':
+      case '/':
         return 'Dashboard';
       case '/about':
         return 'About';

@@ -27,9 +27,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/dashboard" element={<Navigate to="/" />} />
         <Route
-          path="/dashboard"
+          path="/"
           element={
             <ThemeProvider>
               <WithFooter>

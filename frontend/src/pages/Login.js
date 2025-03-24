@@ -48,7 +48,7 @@ const Login = ({ notificationsRef }) => {
         localStorage.setItem('user_id', data.user_id);
         localStorage.setItem('username', username);
         notificationsRef.current.showSnackbar('Login successful!', 'success');
-        navigate('/dashboard');
+        navigate('/');
       } else {
         notificationsRef.current.showSnackbar(data.message || 'Invalid credentials', 'error');
       }

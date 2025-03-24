@@ -18,7 +18,7 @@ import SafePassImage from '../assets/SafePass.png';
 import '../styles/styles.css';
 
 const MENU_ITEMS = [
-  { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
+  { text: 'Dashboard', icon: <Dashboard />, path: '/' },
   { text: 'About', icon: <InfoIcon />, path: '/about' },
 ];
 

@@ -156,7 +156,7 @@ const Profile = ({ notificationsRef }) => {
   };
 
   const handleBackClick = () => {
-    navigate('/dashboard');
+    navigate('/');
   };
 
   return (
