@@ -8,6 +8,10 @@ class Database {
     private $connection;
     private static $instance;
 
+    const MESSAGES = [
+        'connectionError' => "Database connection error."
+    ];
+
     private function __construct() {
         $this->host = getenv('DB_HOST') ?: 'localhost';
         $this->dbName = getenv('DB_NAME') ?: 'safepass';
@@ -41,7 +45,7 @@ class Database {
 
             } catch (PDOException $e) {
                 error_log("Database connection error: " . $e->getMessage());
-                throw new Exception("Database connection error.");
+                throw new Exception(self::MESSAGES['connectionError']);
             }
         }
         return $this->connection;

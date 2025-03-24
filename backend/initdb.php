@@ -2,6 +2,12 @@
 
 require_once 'database.php';
 
+// Centralize as mensagens de erro e sucesso
+const MESSAGES = [
+    'databaseOk' => "Database is OK!\n",
+    'errorOccurred' => "An error occurred: "
+];
+
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
@@ -9,7 +15,6 @@ try {
     $stmt = $conn->query("SHOW DATABASES LIKE '$dbName'");
     if ($stmt->rowCount() == 0) {
         $conn->exec("CREATE DATABASE $dbName");
-        echo "Database '$dbName' created.\n";
     }
 
     $conn->exec("USE $dbName");
@@ -18,14 +23,12 @@ try {
         $stmt = $conn->query("SHOW TABLES LIKE '$tableName'");
         if ($stmt->rowCount() == 0) {
             $conn->exec($createSQL);
-            echo "Table '$tableName' created.\n";
         } else {
             $stmt = $conn->query("DESCRIBE $tableName");
             $columns = $stmt->fetchAll(PDO::FETCH_COLUMN);
             if (array_diff($expectedColumns, $columns)) {
                 $conn->exec("DROP TABLE $tableName");
                 $conn->exec($createSQL);
-                echo "Table '$tableName' structure corrected.\n";
             }
         }
     }
@@ -61,9 +64,9 @@ try {
     checkAndCreateTable($conn, 'users', $createUsersTable, $expectedUsersColumns);
     checkAndCreateTable($conn, 'dashboard', $createDashboardTable, $expectedDashboardColumns);
 
-    echo "Database is OK!\n";
+    echo MESSAGES['databaseOk'];
 
 } catch (Exception $e) {
-    echo "An error occurred: " . $e->getMessage();
+    echo MESSAGES['errorOccurred'] . $e->getMessage();
 }
 ?>

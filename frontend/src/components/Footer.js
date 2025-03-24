@@ -4,16 +4,7 @@ import '../styles/styles.css';
 
 function Footer() {
   return (
-    <Box
-      component="footer"
-      className="footer"
-      sx={{
-        backgroundColor: (theme) => 
-          theme.palette.mode === 'light' 
-            ? theme.palette.grey[200] 
-            : theme.palette.grey[800],
-      }}
-    >
+    <Box component="footer" className="footer">
       <Container maxWidth="xl">
         <Typography variant="body2" className="footerText">
           {'Copyright © SafePass '}

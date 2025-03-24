@@ -407,6 +407,33 @@ body.dark-mode .passText {
     gap: 8px;
 }
 
+/* Password Strength */
+
+.passwordStrengthContainer {
+    margin-top: 16px;
+  }
+  
+  .passwordMessage {
+    font-weight: bold;
+  }
+  
+  .linearProgress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e0e0e0;
+  }
+  
+  .linearProgressBar {
+    background-color: inherit;
+  }
+  
+  .chipContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
 /* About */
 .aboutContainer {
     position: relative;
@@ -514,10 +541,18 @@ body.dark-mode .passText {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--footer-bg-color);
+    background-color: #f5f5f5;
 }
 
 .footerText {
     text-align: center;
-    color: var(--footer-text-color);
+    color: #000;
+}
+
+body.light-mode .footer {
+    background-color: #f5f5f5;
+}
+
+body.dark-mode .footer {
+    background-color: #424242;
 }

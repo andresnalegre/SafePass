@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, LinearProgress, Chip } from '@mui/material';
+import '../styles/styles.css';
 
 export const getPasswordStrength = (password) => {
   if (!password) {
@@ -68,23 +69,21 @@ const PasswordStrength = ({ password }) => {
   const { score, message, color, requirements } = getPasswordStrength(password);
 
   return (
-    <Box sx={{ mt: 2 }}>
-      <Typography variant="body2" sx={{ color, fontWeight: 'bold' }}>
+    <Box className="passwordStrengthContainer">
+      <Typography variant="body2" className="passwordMessage" style={{ color }}>
         {message}
       </Typography>
       <LinearProgress
         variant="determinate"
         value={score}
+        className="linearProgress"
         sx={{
-          height: 8,
-          borderRadius: 1,
-          backgroundColor: '#e0e0e0',
           '& .MuiLinearProgress-bar': {
             backgroundColor: color,
           },
         }}
       />
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+      <Box className="chipContainer">
         <Chip label="8+ characters" color={requirements.minLength ? 'success' : 'default'} />
         <Chip label="Uppercase" color={requirements.hasUppercase ? 'success' : 'default'} />
         <Chip label="Lowercase" color={requirements.hasLowercase ? 'success' : 'default'} />

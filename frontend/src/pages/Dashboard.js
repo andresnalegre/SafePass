@@ -225,8 +225,8 @@ const Dashboard = ({ notificationsRef }) => {
       <Sidebar mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle} />
       <Container component="main" maxWidth="xl" className="dashMain">
         <Toolbar />
-        <Box className="dashHeader" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6" sx={{ flexGrow: 1, fontSize: '1.5rem' }}>
+        <Box className="dashHeader">
+          <Typography variant="h6" className="welcomeText">
             Welcome, {userName}!
           </Typography>
           <Button
@@ -270,10 +270,10 @@ const Dashboard = ({ notificationsRef }) => {
                       <CardContent>
                         <Box className="passDetails">
                           <Box>
-                            <Typography variant="h6" sx={{ fontSize: '1.25rem', color: 'text.primary' }}>
+                            <Typography variant="h6" className="passwordTitle">
                               {password.title}
                             </Typography>
-                            <Typography sx={{ color: 'text.secondary', fontSize: '1rem' }}>
+                            <Typography className="passwordUsername">
                               {password.username}
                             </Typography>
                           </Box>
@@ -301,16 +301,7 @@ const Dashboard = ({ notificationsRef }) => {
                           </Box>
                         </Box>
                         {visiblePasswords[password.id] && (
-                          <Typography
-                            variant="body2"
-                            className="passText"
-                            sx={{
-                              backgroundColor: 'background.paper',
-                              color: 'text.primary',
-                              padding: '0.5rem',
-                              borderRadius: '4px',
-                            }}
-                          >
+                          <Typography variant="body2" className="passText">
                             {password.password}
                           </Typography>
                         )}

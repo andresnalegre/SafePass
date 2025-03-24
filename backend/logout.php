@@ -7,6 +7,12 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 
+const MESSAGES = [
+    'logoutSuccess' => 'Logged out successfully',
+    'logoutError' => 'Error during logout',
+    'invalidRequestMethod' => 'Invalid request method'
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $_SESSION = [];
@@ -21,12 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         session_destroy();
 
-        echo json_encode(['success' => true, 'message' => 'Logged out successfully']);
+        echo json_encode(['success' => true, 'message' => MESSAGES['logoutSuccess']]);
     } catch (Exception $e) {
         error_log("Logout error: " . $e->getMessage());
-        echo json_encode(['success' => false, 'message' => 'Error during logout']);
+        echo json_encode(['success' => false, 'message' => MESSAGES['logoutError']]);
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+    echo json_encode(['success' => false, 'message' => MESSAGES['invalidRequestMethod']]);
 }
 ?>
