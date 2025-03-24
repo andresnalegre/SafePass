@@ -226,15 +226,11 @@ const Dashboard = ({ notificationsRef }) => {
       <Container component="main" maxWidth="xl" className="dashMain">
         <Toolbar />
         <Box className="dashHeader">
-          <Typography variant="h6" className="welcomeText">
-            Welcome, {userName}!
-          </Typography>
           <Button
             variant="contained"
             color="success"
             startIcon={<AddIcon />}
-            onClick={handleAddPassword}
-          >
+            onClick={handleAddPassword}>
             Add Password
           </Button>
         </Box>

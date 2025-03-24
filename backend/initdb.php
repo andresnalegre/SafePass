@@ -2,7 +2,6 @@
 
 require_once 'database.php';
 
-// Centralize as mensagens de erro e sucesso
 const MESSAGES = [
     'databaseOk' => "Database is OK!\n",
     'errorOccurred' => "An error occurred: "
