@@ -6,34 +6,18 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once 'database.php';
 
-const MESSAGES = [
-    'userNotFound' => 'User was not found!',
-    'fetchProfileError' => 'Error fetching profile',
-    'fileTypeNotAllowed' => 'File type not allowed!',
-    'fileTooLarge' => 'File is too large!',
-    'uploadFailed' => 'Upload has failed!',
-    'uploadError' => 'Upload error',
-    'avatarRemoved' => 'Avatar removed successfully',
-    'avatarNotFound' => 'Avatar not found',
-    'removeAvatarError' => 'Error removing avatar',
-    'passwordUpdated' => 'Password updated',
-    'updatePasswordError' => 'Failed to update password',
-    'userIdNotProvided' => 'User ID not provided',
-    'invalidData' => 'Invalid data',
-    'serverError' => 'Server error: '
-];
-
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
 
     function getUserProfile($conn, $userId) {
         try {
-            $stmt = $conn->prepare("SELECT user, avatar_url FROM users WHERE id = :userId");
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt = $conn->prepare("SELECT username, avatar_url FROM users WHERE id = ?");
+            $stmt->bind_param("i", $userId);
             $stmt->execute();
+            $result = $stmt->get_result();
             
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user = $result->fetch_assoc();
             
             if ($user) {
                 $user['avatarUrl'] = $user['avatar_url'] 
@@ -42,10 +26,10 @@ try {
                 return ['success' => true, 'user' => $user];
             }
             
-            return ['success' => false, 'message' => MESSAGES['userNotFound']];
-        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'User was not found!'];
+        } catch (Exception $e) {
             error_log("Error fetching profile: " . $e->getMessage());
-            return ['success' => false, 'message' => MESSAGES['fetchProfileError']];
+            return ['success' => false, 'message' => 'Error fetching profile'];
         }
     }
 
@@ -63,17 +47,16 @@ try {
 
             $allowTypes = ['jpg', 'jpeg', 'png', 'gif'];
             if (!in_array($fileType, $allowTypes)) {
-                return ['success' => false, 'message' => MESSAGES['fileTypeNotAllowed']];
+                return ['success' => false, 'message' => 'File type not allowed!'];
             }
 
             if ($file['size'] > 5 * 1024 * 1024) {
-                return ['success' => false, 'message' => MESSAGES['fileTooLarge']];
+                return ['success' => false, 'message' => 'File is too large!'];
             }
 
             if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-                $stmt = $conn->prepare("UPDATE users SET avatar_url = :avatarPath WHERE id = :userId");
-                $stmt->bindParam(':avatarPath', $targetFilePath, PDO::PARAM_STR);
-                $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+                $stmt = $conn->prepare("UPDATE users SET avatar_url = ? WHERE id = ?");
+                $stmt->bind_param("si", $targetFilePath, $userId);
                 $stmt->execute();
 
                 return [
@@ -82,19 +65,20 @@ try {
                 ];
             }
 
-            return ['success' => false, 'message' => MESSAGES['uploadFailed']];
-        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Upload has failed!'];
+        } catch (Exception $e) {
             error_log("Upload error: " . $e->getMessage());
-            return ['success' => false, 'message' => MESSAGES['uploadError']];
+            return ['success' => false, 'message' => 'Upload error'];
         }
     }
 
     function removeAvatar($conn, $userId) {
         try {
-            $stmt = $conn->prepare("SELECT avatar_url FROM users WHERE id = :userId");
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt = $conn->prepare("SELECT avatar_url FROM users WHERE id = ?");
+            $stmt->bind_param("i", $userId);
             $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $result = $stmt->get_result();
+            $user = $result->fetch_assoc();
 
             if ($user && $user['avatar_url']) {
                 $filePath = $user['avatar_url'];
@@ -103,17 +87,17 @@ try {
                     unlink($filePath);
                 }
 
-                $stmt = $conn->prepare("UPDATE users SET avatar_url = NULL WHERE id = :userId");
-                $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+                $stmt = $conn->prepare("UPDATE users SET avatar_url = NULL WHERE id = ?");
+                $stmt->bind_param("i", $userId);
                 $stmt->execute();
 
-                return ['success' => true, 'message' => MESSAGES['avatarRemoved']];
+                return ['success' => true, 'message' => 'Avatar removed successfully'];
             }
 
-            return ['success' => false, 'message' => MESSAGES['avatarNotFound']];
-        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Avatar not found'];
+        } catch (Exception $e) {
             error_log("Error removing avatar: " . $e->getMessage());
-            return ['success' => false, 'message' => MESSAGES['removeAvatarError']];
+            return ['success' => false, 'message' => 'Error removing avatar'];
         }
     }
 
@@ -121,16 +105,14 @@ try {
         try {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
             
-            $stmt = $conn->prepare("UPDATE users SET password = :password WHERE id = :userId");
-            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-            
+            $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
+            $stmt->bind_param("si", $hashedPassword, $userId);
             $stmt->execute();
             
-            return ['success' => true, 'message' => MESSAGES['passwordUpdated']];
-        } catch (PDOException $e) {
+            return ['success' => true, 'message' => 'Password updated'];
+        } catch (Exception $e) {
             error_log("Error updating password: " . $e->getMessage());
-            return ['success' => false, 'message' => MESSAGES['updatePasswordError']];
+            return ['success' => false, 'message' => 'Failed to update password'];
         }
     }
 
@@ -139,7 +121,7 @@ try {
         if ($userId) {
             echo json_encode(getUserProfile($conn, $userId));
         } else {
-            echo json_encode(['success' => false, 'message' => MESSAGES['userIdNotProvided']]);
+            echo json_encode(['success' => false, 'message' => 'User ID not provided']);
         }
     }
 
@@ -152,10 +134,10 @@ try {
             if ($userId) {
                 echo json_encode(uploadAvatar($conn, $userId, $_FILES['avatar']));
             } else {
-                echo json_encode(['success' => false, 'message' => MESSAGES['userIdNotProvided']]);
+                echo json_encode(['success' => false, 'message' => 'User ID not provided']);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => MESSAGES['invalidData']]);
+            echo json_encode(['success' => false, 'message' => 'Invalid data']);
         }
     }
 
@@ -165,7 +147,7 @@ try {
         if ($userId) {
             echo json_encode(removeAvatar($conn, $userId));
         } else {
-            echo json_encode(['success' => false, 'message' => MESSAGES['userIdNotProvided']]);
+            echo json_encode(['success' => false, 'message' => 'User ID not provided']);
         }
     }
     
@@ -173,7 +155,7 @@ try {
     error_log("General error: " . $e->getMessage());
     echo json_encode([
         'success' => false, 
-        'message' => MESSAGES['serverError'] . $e->getMessage()
+        'message' => 'Server error: ' . $e->getMessage()
     ]);
 }
 ?>

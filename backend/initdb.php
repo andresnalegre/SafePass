@@ -1,71 +1,100 @@
 <?php
-
 require_once 'database.php';
 
-const MESSAGES = [
-    'databaseOk' => "Database is OK!\n",
-    'errorOccurred' => "An error occurred: "
-];
-
 try {
-    $db = Database::getInstance();
-    $conn = $db->getConnection();
-    $dbName = $db->getDatabaseName();
-    $stmt = $conn->query("SHOW DATABASES LIKE '$dbName'");
-    if ($stmt->rowCount() == 0) {
-        $conn->exec("CREATE DATABASE $dbName");
+    echo "Connecting to the XAMPP server...\n";
+    $conn = new mysqli("localhost", "root", "", "", 3306, "/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock");
+
+    if ($conn->connect_error) {
+        throw new Exception("Error connecting to XAMPP:\n\n" . $conn->connect_error);
     }
+    echo "Successfully connected to XAMPP!\n\n";
 
-    $conn->exec("USE $dbName");
+    echo "Setting character set to utf8mb4...\n";
+    if (!$conn->set_charset("utf8mb4")) {
+        throw new Exception("Failed to set character set to utf8mb4: " . $conn->error);
+    }
+    echo "Character set to utf8mb4 successfully!\n\n";
 
-    function checkAndCreateTable($conn, $tableName, $createSQL, $expectedColumns) {
-        $stmt = $conn->query("SHOW TABLES LIKE '$tableName'");
-        if ($stmt->rowCount() == 0) {
-            $conn->exec($createSQL);
+    echo "Creating database 'safepass' if it does not exist...\n";
+    $sql = "CREATE DATABASE IF NOT EXISTS safepass CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+    if (!$conn->query($sql)) {
+        throw new Exception("Failed to create database 'safepass': " . $conn->error);
+    }
+    echo "Database 'safepass' is created!\n\n";
+
+    $conn->select_db("safepass");
+
+    function checkAndCreateOrUpdateTable($conn, $tableName, $createSQL, $expectedColumns) {
+        echo "Checking '$tableName' table...\n";
+        $result = $conn->query("SHOW TABLES LIKE '$tableName'");
+        if ($result->num_rows == 0) {
+            echo "'$tableName' table not found. Creating...\n";
+            if (!$conn->query($createSQL)) {
+                throw new Exception("Failed to create table '$tableName': " . $conn->error);
+            }
+            echo "Table '$tableName' created successfully.\n\n";
         } else {
-            $stmt = $conn->query("DESCRIBE $tableName");
-            $columns = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            if (array_diff($expectedColumns, $columns)) {
-                $conn->exec("DROP TABLE $tableName");
-                $conn->exec($createSQL);
+            echo "Table '$tableName' already exists. Verifying integrity...\n";
+            $result = $conn->query("DESCRIBE $tableName");
+            $existingColumns = [];
+            while ($row = $result->fetch_assoc()) {
+                $existingColumns[] = $row['Field'];
+            }
+            $missingColumns = array_diff($expectedColumns, $existingColumns);
+            if (!empty($missingColumns)) {
+                foreach ($missingColumns as $column) {
+                    echo "Missing columns found. Adding them now!\n";
+                    echo "Adding missing column '$column' to table '$tableName'...\n";
+                    $alterSql = "ALTER TABLE $tableName ADD $column VARCHAR(255) NOT NULL";
+                    if (!$conn->query($alterSql)) {
+                        throw new Exception("Failed to add column '$column' to table '$tableName': " . $conn->error);
+                    }
+                    echo "Column '$column' added successfully.\n";
+                }
+            } else {
+                echo "All columns present in '$tableName' table!\n\n";
             }
         }
     }
 
     $createUsersTable = "
     CREATE TABLE users (
-        id INT(11) NOT NULL AUTO_INCREMENT,
-        user VARCHAR(50) NOT NULL UNIQUE,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         last_login TIMESTAMP NULL DEFAULT NULL,
-        avatar_url VARCHAR(255) DEFAULT NULL,
-        PRIMARY KEY (id)
-    );";
+        avatar_url VARCHAR(255) DEFAULT NULL
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
 
-    $expectedUsersColumns = ['id', 'user', 'password', 'created_at', 'updated_at', 'last_login', 'avatar_url'];
+    $expectedUsersColumns = ['id', 'username', 'password', 'created_at', 'updated_at', 'last_login', 'avatar_url'];
 
     $createDashboardTable = "
     CREATE TABLE dashboard (
-        id INT(11) NOT NULL AUTO_INCREMENT,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(100) DEFAULT NULL,
         username VARCHAR(100) DEFAULT NULL,
         password VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        created_by VARCHAR(255) DEFAULT NULL,
-        PRIMARY KEY (id)
-    );";
+        created_by VARCHAR(255) DEFAULT NULL
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
 
     $expectedDashboardColumns = ['id', 'title', 'username', 'password', 'created_at', 'updated_at', 'created_by'];
 
-    checkAndCreateTable($conn, 'users', $createUsersTable, $expectedUsersColumns);
-    checkAndCreateTable($conn, 'dashboard', $createDashboardTable, $expectedDashboardColumns);
+    checkAndCreateOrUpdateTable($conn, 'users', $createUsersTable, $expectedUsersColumns);
+    checkAndCreateOrUpdateTable($conn, 'dashboard', $createDashboardTable, $expectedDashboardColumns);
 
-    echo MESSAGES['databaseOk'];
+    echo "Database is OK and ready to GO!\n\n";
 
 } catch (Exception $e) {
-    echo MESSAGES['errorOccurred'] . $e->getMessage();
+    echo "Error: " . $e->getMessage() . "\n";
+} finally {
+    if (isset($conn) && $conn instanceof mysqli) {
+        $conn->close();
+        echo "Starting React!\n";
+    }
 }
 ?>

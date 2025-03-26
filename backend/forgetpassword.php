@@ -13,21 +13,32 @@ const MESSAGES = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $newPassword = $_POST['newPassword'];
+    $username = $_POST['username'] ?? null;
+    $newPassword = $_POST['newPassword'] ?? null;
+
+    if (!$username || !$newPassword) {
+        echo json_encode(['success' => false, 'message' => MESSAGES['userNotFound']]);
+        exit();
+    }
 
     try {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $stmt = $conn->prepare("SELECT * FROM users WHERE user = :username");
-        $stmt->execute(['username' => $username]);
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if ($stmt->rowCount() > 0) {
+        if ($result->num_rows > 0) {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("UPDATE users SET password = :password WHERE user = :username");
-            $stmt->execute(['password' => $hashedPassword, 'username' => $username]);
-            echo json_encode(['success' => true, 'message' => MESSAGES['passwordUpdated']]);
+            $stmt = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
+            $stmt->bind_param("ss", $hashedPassword, $username);
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => MESSAGES['passwordUpdated']]);
+            } else {
+                echo json_encode(['success' => false, 'message' => MESSAGES['serverError']]);
+            }
         } else {
             echo json_encode(['success' => false, 'message' => MESSAGES['userNotFound']]);
         }

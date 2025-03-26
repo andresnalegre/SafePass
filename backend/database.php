@@ -5,18 +5,21 @@ class Database {
     private $dbName;
     private $username;
     private $password;
+    private $socket;
     private $connection;
     private static $instance;
 
     const MESSAGES = [
-        'connectionError' => "Database connection error."
+        'connectionError' => "Failed to connect to the database.",
+        'charsetError' => "Failed to set character set to utf8mb4."
     ];
 
     private function __construct() {
         $this->host = getenv('DB_HOST') ?: 'localhost';
         $this->dbName = getenv('DB_NAME') ?: 'safepass';
         $this->username = getenv('DB_USER') ?: 'root';
-        $this->password = getenv('DB_PASS') ?: 'admin';
+        $this->password = getenv('DB_PASS') ?: '';
+        $this->socket = '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock';
     }
 
     public static function getInstance() {
@@ -28,35 +31,25 @@ class Database {
 
     public function getConnection() {
         if ($this->connection === null) {
-            try {
-                $dsn = "mysql:host={$this->host};charset=utf8mb4";
-                $this->connection = new PDO($dsn, $this->username, $this->password);
-                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $this->connection = new mysqli($this->host, $this->username, $this->password, $this->dbName, 0, $this->socket);
 
-                $this->connection->exec("CREATE DATABASE IF NOT EXISTS {$this->dbName}");
+            if ($this->connection->connect_error) {
+                error_log("Database connection error: " . $this->connection->connect_error);
+                throw new Exception(self::MESSAGES['connectionError'] . " " . $this->connection->connect_error);
+            }
 
-                $dsnWithDb = "mysql:host={$this->host};dbname={$this->dbName};charset=utf8mb4";
-                $this->connection = new PDO($dsnWithDb, $this->username, $this->password);
-                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-            } catch (PDOException $e) {
-                error_log("Database connection error: " . $e->getMessage());
-                throw new Exception(self::MESSAGES['connectionError']);
+            if (!$this->connection->set_charset("utf8mb4")) {
+                throw new Exception(self::MESSAGES['charsetError'] . " " . $this->connection->error);
             }
         }
         return $this->connection;
     }
 
-    public function getDatabaseName() {
-        return $this->dbName;
-    }
-
     public function closeConnection() {
-        $this->connection = null;
+        if ($this->connection !== null) {
+            $this->connection->close();
+            $this->connection = null;
+        }
     }
 }
 ?>

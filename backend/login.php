@@ -35,17 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $stmt = $conn->prepare("SELECT * FROM users WHERE user = :username");
-        $stmt->execute(['username' => $username]);
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if ($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['user'];
+                $_SESSION['username'] = $user['username'];
                 echo json_encode([
                     'success' => true,
-                    'message' => MESSAGES['loginSuccess'] . $user['user'] . '!',
+                    'message' => MESSAGES['loginSuccess'] . $user['username'] . '!',
                     'user_id' => $user['id']
                 ]);
             } else {

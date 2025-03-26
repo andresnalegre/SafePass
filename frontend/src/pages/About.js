@@ -66,9 +66,7 @@ const About = ({ notificationsRef }) => {
               </Box>
 
               <Typography variant="body1" paragraph className="aboutSubtitle">
-                SafePass  is a platform that helps you create stronger passwords 
-                and manage them easily. You can update, delete, and check the strength 
-                of your passwords to keep your accounts secure.
+                SafePass  is a platform that helps you create stronger passwords and manage them easily.
               </Typography>
 
               <List>

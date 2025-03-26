@@ -8,7 +8,7 @@ const Profile = ({ notificationsRef }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
-    user: '',
+    username: '',
     avatarUrl: '',
   });
   const [formData, setFormData] = useState({
@@ -159,7 +159,7 @@ const Profile = ({ notificationsRef }) => {
       const data = await response.json();
       if (data.success) {
         setUser((prev) => ({ ...prev, avatarUrl: '' }));
-        notificationsRef.current.showSnackbar(messages.avatarRemoveSuccess, 'info');
+        notificationsRef.current.showSnackbar(messages.avatarRemoveSuccess, 'success');
       } else {
         notificationsRef.current.showSnackbar(data.message || messages.avatarRemoveError, 'error');
       }
@@ -191,7 +191,7 @@ const Profile = ({ notificationsRef }) => {
           <Grid container spacing={3}>
             <Grid item xs={12} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
               <Avatar
-                className="avatar"
+                sx={{ width: 100, height: 100 }}
                 src={user.avatarUrl}
                 alt={user.user}
               >
@@ -213,7 +213,7 @@ const Profile = ({ notificationsRef }) => {
                 fullWidth
                 label="Username"
                 name="username"
-                value={user.user}
+                value={user.username}
                 disabled
                 InputLabelProps={{
                   className: 'textFieldLabel',
@@ -250,7 +250,7 @@ const Profile = ({ notificationsRef }) => {
                 fullWidth
                 disabled={loading}
               >
-                {loading ? 'Updating...' : 'Update Profile'}
+                {loading ? 'Updating...' : 'Save'}
               </Button>
             </Grid>
           </Grid>

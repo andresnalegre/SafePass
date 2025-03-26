@@ -6,23 +6,25 @@ header("Content-Type: application/json");
 
 include_once 'database.php';
 
-const USERNAME_PASSWORD_REQUIRED = 'Username and password are required!';
-const INVALID_USERNAME = 'Use only lowercase letters and numbers!';
-const USERNAME_EXISTS = 'Username already exists!';
-const REGISTRATION_SUCCESS = 'User registered successfully!';
-const SERVER_ERROR = 'Server error: Verify connection and try again!';
+const MESSAGES = [
+    'usernamePasswordRequired' => 'Username and password are required!',
+    'invalidUsername' => 'Use only lowercase letters and numbers!',
+    'usernameExists' => 'Username already exists!',
+    'registrationSuccess' => 'User registered successfully!',
+    'serverError' => 'Server error: Verify connection and try again!'
+];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? null;
     $password = $_POST['password'] ?? null;
 
     if (!$username || !$password) {
-        echo json_encode(['success' => false, 'message' => USERNAME_PASSWORD_REQUIRED]);
+        echo json_encode(['success' => false, 'message' => MESSAGES['usernamePasswordRequired']]);
         exit();
     }
 
     if (!preg_match('/^[a-z0-9]+$/', $username)) {
-        echo json_encode(['success' => false, 'message' => INVALID_USERNAME]);
+        echo json_encode(['success' => false, 'message' => MESSAGES['invalidUsername']]);
         exit();
     }
 
@@ -30,21 +32,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $stmt = $conn->prepare("SELECT * FROM users WHERE user = :username");
-        $stmt->execute(['username' => $username]);
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if ($stmt->rowCount() > 0) {
-            echo json_encode(['success' => false, 'message' => USERNAME_EXISTS]);
+        if ($result->num_rows > 0) {
+            echo json_encode(['success' => false, 'message' => MESSAGES['usernameExists']]);
         } else {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = $conn->prepare("INSERT INTO users (user, password) VALUES (:username, :password)");
-            $stmt->execute(['username' => $username, 'password' => $hashedPassword]);
-            echo json_encode(['success' => true, 'message' => REGISTRATION_SUCCESS]);
+            $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+            $stmt->bind_param("ss", $username, $hashedPassword);
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => MESSAGES['registrationSuccess']]);
+            } else {
+                echo json_encode(['success' => false, 'message' => MESSAGES['serverError']]);
+            }
         }
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
-        echo json_encode(['success' => false, 'message' => SERVER_ERROR]);
+        echo json_encode(['success' => false, 'message' => MESSAGES['serverError']]);
     }
 }
 ?>

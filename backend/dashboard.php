@@ -37,14 +37,22 @@ try {
 
     function getPasswords($conn, $username) {
         try {
-            $stmt = $conn->prepare("SELECT id, title, username, password FROM dashboard WHERE created_by = :username");
-            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            // Atualiza o last_login para o timestamp atual
+            $stmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE username = ?");
+            $stmt->bind_param("s", $username);
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to update last_login for user: $username");
+            }
+
+            $stmt = $conn->prepare("SELECT id, title, username, password FROM dashboard WHERE created_by = ?");
+            $stmt->bind_param("s", $username);
             $stmt->execute();
+            $result = $stmt->get_result();
             
-            $passwords = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $passwords = $result->fetch_all(MYSQLI_ASSOC);
             
             return ['success' => true, 'passwords' => $passwords ?: [], 'message' => $passwords ? MESSAGES['passwordsFound'] : MESSAGES['noPasswordsFound']];
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             error_log("Error fetching passwords: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['fetchPasswordsError']];
         }
@@ -56,19 +64,18 @@ try {
                 return ['success' => false, 'message' => MESSAGES['allFieldsRequired']];
             }
 
-            $stmt = $conn->prepare("INSERT INTO dashboard (title, username, password, created_by) VALUES (:title, :username, :password, :created_by)");
-            $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
-            $stmt->bindParam(':username', $data['username'], PDO::PARAM_STR);
-            $stmt->bindParam(':password', $data['password'], PDO::PARAM_STR);
-            $stmt->bindParam(':created_by', $data['created_by'], PDO::PARAM_STR);
-            $stmt->execute();
-
-            return [
-                'success' => true, 
-                'message' => MESSAGES['passwordCreated'], 
-                'id' => $conn->lastInsertId()
-            ];
-        } catch (PDOException $e) {
+            $stmt = $conn->prepare("INSERT INTO dashboard (title, username, password, created_by) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $data['title'], $data['username'], $data['password'], $data['created_by']);
+            if ($stmt->execute()) {
+                return [
+                    'success' => true, 
+                    'message' => MESSAGES['passwordCreated'], 
+                    'id' => $conn->insert_id
+                ];
+            } else {
+                return ['success' => false, 'message' => MESSAGES['createPasswordError']];
+            }
+        } catch (Exception $e) {
             error_log("Error creating password: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['createPasswordError']];
         }
@@ -80,15 +87,14 @@ try {
                 return ['success' => false, 'message' => MESSAGES['allFieldsRequired']];
             }
 
-            $stmt = $conn->prepare("UPDATE dashboard SET title = :title, username = :username, password = :password WHERE id = :id");
-            $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
-            $stmt->bindParam(':username', $data['username'], PDO::PARAM_STR);
-            $stmt->bindParam(':password', $data['password'], PDO::PARAM_STR);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-
-            return ['success' => true, 'message' => MESSAGES['passwordUpdated']];
-        } catch (PDOException $e) {
+            $stmt = $conn->prepare("UPDATE dashboard SET title = ?, username = ?, password = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $data['title'], $data['username'], $data['password'], $id);
+            if ($stmt->execute()) {
+                return ['success' => true, 'message' => MESSAGES['passwordUpdated']];
+            } else {
+                return ['success' => false, 'message' => MESSAGES['updatePasswordError']];
+            }
+        } catch (Exception $e) {
             error_log("Error updating password: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['updatePasswordError']];
         }
@@ -96,19 +102,16 @@ try {
 
     function deletePassword($conn, $id) {
         try {
-            error_log("Attempting to delete password with ID: " . $id);
-            $stmt = $conn->prepare("DELETE FROM dashboard WHERE id = :id");
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt = $conn->prepare("DELETE FROM dashboard WHERE id = ?");
+            $stmt->bind_param("i", $id);
             $stmt->execute();
 
-            if ($stmt->rowCount() > 0) {
-                error_log("Password deleted successfully.");
+            if ($stmt->affected_rows > 0) {
                 return ['success' => true, 'message' => MESSAGES['passwordDeleted']];
             } else {
-                error_log("No password found with ID: " . $id);
                 return ['success' => false, 'message' => MESSAGES['noPasswordFound']];
             }
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             error_log("Error deleting password: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['deletePasswordError']];
         }
