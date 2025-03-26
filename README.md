@@ -1,7 +1,6 @@
+# About SafePass
 
-# SafePass
-
-**SafePass** is a password management developed using React and PHP, and integrated with MariaDB. It's designed to create secure and strong passwords, featuring a password validator that shows how strong your password is, and makes it easy to store them.
+**SafePass** is a password manager developed using React and PHP, and integrated with MariaDB. It's designed to easily create secure and strong passwords, featuring a password validator that shows how strong your password is, and makes it easy to store them.
 
 ---
 
@@ -30,26 +29,7 @@
      ```
      
 
-## Step 2: Setting Up the Database
-
-   **Validate the username and password**:
-   - Open your terminal, navigate to the backend folder:
-
-     ```bash
-     Safepass/backend/database.php
-     ```
-
-   - By default, the credentials are:
-
-     ```bash
-       $this->username = getenv('DB_USER') ?: 'root';
-       $this->password = getenv('DB_PASS') ?: 'admin';
-     ```
-     
-   **If you already have a password set, please update it in database.php**
-
-
-## Step 3:  How to use the app
+## Step 2: How to use the SafePass app
 
    - Navigate to the SafePass Folder:
 
@@ -65,21 +45,22 @@
      
    **The packege.json is already configured to set up the database and run the React project automatically. Just make sure all dependencies are installed.**
 
-## Step 4: Validating your data into storify at MariaDB
-1. **Access MariaDB**: 
-
+## Step 3:  Validating your data into safepass at XAMPP
+1. **Access MariaDB**:
    - Open a new terminal and run:
 
      ```bash
-     mysql -u root -p
-     ```
- 
-   - Enter the Database password:
-
-     ```text
-     admin
+     /Applications/XAMPP/xamppfiles/bin/mysql -u root -p --socket=/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock;
      ```
      
+   - Alternatively, you can access phpMyAdmin:
+
+     ```bash
+     http://localhost/phpmyadmin
+     ```
+     
+   **Make sure that XAMPP is running properly.**
+
 2. **Select the SafePass Database**:  
    - Select safepass Database:
      
@@ -99,7 +80,7 @@
      ```sql
      SELECT * FROM dashboard;
      ```
-       
+     
 ---
 
 ## License
