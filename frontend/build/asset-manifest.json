@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/SafePass/static/css/main.1ac38360.css",
+    "main.js": "/SafePass/static/js/main.1fc48c66.js",
+    "static/media/Helvetica-BoldOblique.ttf": "/SafePass/static/media/Helvetica-BoldOblique.515cc70a63c280858dc7.ttf",
+    "static/media/logo.png": "/SafePass/static/media/logo.8331145cc69ea52286f9.png",
+    "static/media/SafePass.png": "/SafePass/static/media/SafePass.88a1bc10d8857032e066.png",
+    "index.html": "/SafePass/index.html",
+    "main.1ac38360.css.map": "/SafePass/static/css/main.1ac38360.css.map",
+    "main.1fc48c66.js.map": "/SafePass/static/js/main.1fc48c66.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1ac38360.css",
+    "static/js/main.1fc48c66.js"
+  ]
+}
