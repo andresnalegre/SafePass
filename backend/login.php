@@ -8,12 +8,12 @@ header("Content-Type: application/json");
 include_once 'database.php';
 
 const MESSAGES = [
-    'enterCredentials' => 'Enter your username and password.',
-    'enterUsername' => 'Enter your username.',
-    'enterPassword' => 'Enter your password.',
-    'loginSuccess' => 'Welcome, ',
-    'invalidCredentials' => 'Username or password is incorrect!',
-    'serverError' => 'Error connecting to server.'
+    'enterCredentials'   => 'Enter your username and password.',
+    'enterUsername'      => 'Enter your username.',
+    'enterPassword'      => 'Enter your password.',
+    'loginSuccess'       => 'Welcome, ',
+    'invalidCredentials' => 'Username or password is incorrect.',
+    'serverError'        => 'Error connecting to server.'
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        $db = Database::getInstance();
+        $db   = Database::getInstance();
         $conn = $db->getConnection();
 
         $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
             if (password_verify($password, $user['password'])) {
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_id']  = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 echo json_encode([
                     'success' => true,

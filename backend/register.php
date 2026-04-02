@@ -7,11 +7,11 @@ header("Content-Type: application/json");
 include_once 'database.php';
 
 const MESSAGES = [
-    'usernamePasswordRequired' => 'Username and password are required!',
-    'invalidUsername' => 'Use only lowercase letters and numbers!',
-    'usernameExists' => 'Username already exists!',
-    'registrationSuccess' => 'User registered successfully!',
-    'serverError' => 'Server error: Verify connection and try again!'
+    'usernamePasswordRequired' => 'Username and password are required.',
+    'invalidUsername'          => 'Use only lowercase letters and numbers.',
+    'usernameExists'           => 'Username already exists.',
+    'registrationSuccess'      => 'User registered successfully.',
+    'serverError'              => 'Server error. Please verify your connection and try again.'
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        $db = Database::getInstance();
+        $db   = Database::getInstance();
         $conn = $db->getConnection();
 
         $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");

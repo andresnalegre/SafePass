@@ -8,9 +8,9 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 
 const MESSAGES = [
-    'logoutSuccess' => 'See you next time!',
-    'logoutError' => 'Error during logout',
-    'invalidRequestMethod' => 'Invalid request method'
+    'logoutSuccess'        => 'See you next time!',
+    'logoutError'          => 'Error during logout.',
+    'invalidRequestMethod' => 'Invalid request method.'
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

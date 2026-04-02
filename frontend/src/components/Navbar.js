@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import { Settings as SettingsIcon, Brightness4, Brightness7 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { useTheme } from '../styles/Theme';
 import '../styles/styles.css';
 
@@ -17,7 +16,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { darkMode, toggleDarkMode } = useTheme();
-  const { enqueueSnackbar } = useSnackbar();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const getPageTitle = () => {
@@ -44,38 +42,18 @@ const Navbar = () => {
     handleMenuClose();
   }, [navigate, handleMenuClose]);
 
-  const handleLogout = useCallback(async () => {
-    try {
-      const response = await fetch('http://localhost:8000/logout.php', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        localStorage.removeItem('user_id');
-        localStorage.removeItem('username');
-        sessionStorage.clear();
-        enqueueSnackbar(data.message, { variant: 'success' });
-        navigate('/login', { state: { logoutMessage: data.message } });
-      } else {
-        enqueueSnackbar('Failed to log out. Please try again.', { variant: 'error' });
-      }
-    } catch (error) {
-      console.error('Error logging out:', error);
-      enqueueSnackbar('Error logging out. Please try again.', { variant: 'error' });
-    }
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('username');
+    sessionStorage.clear();
+    navigate('/login', { state: { logoutMessage: 'See you next time!' } });
     handleMenuClose();
-  }, [navigate, handleMenuClose, enqueueSnackbar]);
+  }, [navigate, handleMenuClose]);
 
   return (
     <AppBar position="fixed" className="navAppBar">
       <Toolbar>
-        <Typography
-          variant="h6"
-          className="navDashboardText noSelect"
-        >
+        <Typography variant="h6" className="navDashboardText noSelect">
           {getPageTitle()}
         </Typography>
         <div className="navFlexGrow" />

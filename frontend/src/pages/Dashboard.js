@@ -33,6 +33,8 @@ import PasswordGenerator from '../components/PasswordGenerator';
 import PasswordStrength from '../components/PasswordStrength';
 import '../styles/styles.css';
 
+const PASSWORDS_KEY = 'safepass_passwords';
+
 const Dashboard = ({ notificationsRef }) => {
   const [passwords, setPasswords] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,50 +49,35 @@ const Dashboard = ({ notificationsRef }) => {
   const navigate = useNavigate();
 
   const messages = {
-    userNotLoggedIn: 'User not logged',
-    fetchDataError: 'Failed to fetch data',
-    fetchDataSuccess: 'Passwords found.',
-    fetchDataNoPasswords: 'No passwords found.',
-    copyPasswordSuccess: 'Password copied to clipboard',
-    copyPasswordError: 'Failed to copy password',
-    deletePasswordSuccess: 'Password deleted successfully',
-    deletePasswordError: 'Failed to delete password',
-    savePasswordSuccess: 'Password saved successfully',
-    savePasswordError: 'Failed to save password',
-    serverError: 'Error connecting to server',
-    allFieldsRequired: 'All fields are required',
+    userNotLoggedIn: 'User not logged.',
+    copyPasswordSuccess: 'Password copied to clipboard.',
+    copyPasswordError: 'Failed to copy password.',
+    deletePasswordSuccess: 'Password deleted successfully.',
+    savePasswordSuccess: 'Password saved successfully.',
+    allFieldsRequired: 'All fields are required.',
   };
 
   useEffect(() => {
-    const checkAuthentication = async () => {
-      const storedUserName = localStorage.getItem('username');
-      
-      if (!storedUserName) {
-        notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
-        navigate('/login');
-        return;
-      }
+    const storedUserName = localStorage.getItem('username');
 
-      setUserName(storedUserName);
+    if (!storedUserName) {
+      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
+      navigate('/login');
+      return;
+    }
 
-      try {
-        const response = await fetch(`http://localhost:8000/dashboard.php?username=${storedUserName}`);
-        const data = await response.json();
-        
-        if (data.success) {
-          setPasswords(data.passwords);
-        } else {
-          notificationsRef.current.showSnackbar(data.message || messages.fetchDataError, 'error');
-          navigate('/login');
-        }
-      } catch (error) {
-        notificationsRef.current.showSnackbar(messages.serverError, 'error');
-        navigate('/login');
-      }
-    };
+    setUserName(storedUserName);
 
-    checkAuthentication();
-  }, [navigate, notificationsRef, messages.userNotLoggedIn, messages.fetchDataError, messages.serverError]);
+    const allPasswords = JSON.parse(localStorage.getItem(PASSWORDS_KEY) || '[]');
+    const userPasswords = allPasswords.filter((p) => p.created_by === storedUserName);
+    setPasswords(userPasswords);
+  }, [navigate, notificationsRef]);
+
+  const savePasswordsToStorage = (updatedPasswords, currentUser) => {
+    const allPasswords = JSON.parse(localStorage.getItem(PASSWORDS_KEY) || '[]');
+    const otherPasswords = allPasswords.filter((p) => p.created_by !== currentUser);
+    localStorage.setItem(PASSWORDS_KEY, JSON.stringify([...otherPasswords, ...updatedPasswords]));
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -112,27 +99,11 @@ const Dashboard = ({ notificationsRef }) => {
     }));
   };
 
-  const handleDeletePassword = async (passwordId) => {
-    try {
-      const response = await fetch('http://localhost:8000/dashboard.php', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: passwordId }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setPasswords((prev) => prev.filter((p) => p.id !== passwordId));
-        notificationsRef.current.showSnackbar(data.message || messages.deletePasswordSuccess, 'success');
-      } else {
-        notificationsRef.current.showSnackbar(data.message || messages.deletePasswordError, 'error');
-      }
-    } catch (error) {
-      notificationsRef.current.showSnackbar(messages.serverError, 'error');
-    }
+  const handleDeletePassword = (passwordId) => {
+    const updated = passwords.filter((p) => p.id !== passwordId);
+    setPasswords(updated);
+    savePasswordsToStorage(updated, userName);
+    notificationsRef.current.showSnackbar(messages.deletePasswordSuccess, 'success');
   };
 
   const handleAddPassword = () => {
@@ -149,60 +120,32 @@ const Dashboard = ({ notificationsRef }) => {
     setIsSaveEnabled(false);
   };
 
-  const handleSavePassword = async () => {
+  const handleSavePassword = () => {
     if (!newPassword.title || !newPassword.username || !newPassword.password) {
       notificationsRef.current.showSnackbar(messages.allFieldsRequired, 'warning');
       return;
     }
-  
-    const method = editingPassword ? 'PUT' : 'POST';
-    const url = editingPassword 
-      ? `http://localhost:8000/dashboard.php?id=${editingPassword.id}` 
-      : 'http://localhost:8000/dashboard.php';
-  
-    try {
-      const payload = {
-        title: newPassword.title,
-        username: newPassword.username,
-        password: newPassword.password,
+
+    let updated;
+    if (editingPassword) {
+      updated = passwords.map((p) =>
+        p.id === editingPassword.id ? { ...newPassword, id: p.id, created_by: userName } : p
+      );
+    } else {
+      const newEntry = {
+        ...newPassword,
+        id: Date.now().toString(),
         created_by: userName,
       };
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        if (editingPassword) {
-          setPasswords((prev) =>
-            prev.map((p) => (p.id === editingPassword.id ? { ...newPassword, id: p.id } : p))
-          );
-          notificationsRef.current.showSnackbar(data.message || messages.savePasswordSuccess, 'success');
-        } else {
-          const newEntry = { 
-            ...newPassword, 
-            id: data.id || Date.now(), 
-            created_by: userName 
-          };
-          setPasswords((prev) => [...prev, newEntry]);
-          notificationsRef.current.showSnackbar(data.message || messages.savePasswordSuccess, 'success');
-        }
-        
-        setDialogOpen(false);
-        setEditingPassword(null);
-        setIsSaveEnabled(false);
-      } else {
-        notificationsRef.current.showSnackbar(data.message || messages.savePasswordError, 'error');
-      }
-    } catch (error) {
-      notificationsRef.current.showSnackbar(messages.serverError, 'error');
+      updated = [...passwords, newEntry];
     }
+
+    setPasswords(updated);
+    savePasswordsToStorage(updated, userName);
+    notificationsRef.current.showSnackbar(messages.savePasswordSuccess, 'success');
+    setDialogOpen(false);
+    setEditingPassword(null);
+    setIsSaveEnabled(false);
   };
 
   const toggleShowPassword = () => {
@@ -230,7 +173,8 @@ const Dashboard = ({ notificationsRef }) => {
             variant="contained"
             color="success"
             startIcon={<AddIcon />}
-            onClick={handleAddPassword}>
+            onClick={handleAddPassword}
+          >
             Add Password
           </Button>
         </Box>
@@ -311,7 +255,7 @@ const Dashboard = ({ notificationsRef }) => {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <PasswordGenerator 
+            <PasswordGenerator
               onGenerate={(password) => setNewPassword((prev) => ({ ...prev, password }))}
               notificationsRef={notificationsRef}
             />

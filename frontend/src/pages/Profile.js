@@ -7,62 +7,37 @@ import '../styles/styles.css';
 const Profile = ({ notificationsRef }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({
-    username: '',
-    avatarUrl: '',
-  });
-  const [formData, setFormData] = useState({
-    password: '',
-    confirmPassword: '',
-  });
+  const [user, setUser] = useState({ username: '', avatarUrl: '' });
+  const [formData, setFormData] = useState({ password: '', confirmPassword: '' });
 
   const messages = {
-    userNotLoggedIn: 'User not logged',
-    fetchUserDataError: 'Failed to fetch user data',
-    passwordsMismatch: 'Passwords do not match',
-    passwordUpdateSuccess: 'Password updated successfully',
-    passwordUpdateError: 'Failed to update password',
-    avatarUploadSuccess: 'Avatar uploaded successfully',
-    avatarUploadError: 'Failed to upload avatar',
-    avatarRemoveSuccess: 'Avatar removed successfully',
-    avatarRemoveError: 'Failed to remove avatar',
-    serverError: 'Error connecting to server',
+    userNotLoggedIn: 'User not logged.',
+    passwordsMismatch: 'Passwords do not match.',
+    passwordUpdateSuccess: 'Password updated successfully.',
+    avatarUploadSuccess: 'Avatar uploaded successfully.',
+    avatarRemoveSuccess: 'Avatar removed successfully.',
   };
 
   useEffect(() => {
-    const checkAuthentication = () => {
-      const userId = localStorage.getItem('user_id');
-      if (!userId) {
-        notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
-        navigate('/login');
-        return;
-      }
-      fetchUserData(userId);
-    };
+    const userId = localStorage.getItem('user_id');
+    const username = localStorage.getItem('username');
 
-    const fetchUserData = async (userId) => {
-      try {
-        const response = await fetch(`http://localhost:8000/profile.php?user_id=${userId}`);
-        const data = await response.json();
-        if (data.success) {
-          setUser(data.user);
-        } else {
-          notificationsRef.current.showSnackbar(data.message || messages.fetchUserDataError, 'error');
-        }
-      } catch (err) {
-        notificationsRef.current.showSnackbar(messages.serverError, 'error');
-      }
-    };
+    if (!userId) {
+      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
+      navigate('/login');
+      return;
+    }
 
-    checkAuthentication();
-  }, [navigate, notificationsRef, messages.userNotLoggedIn, messages.fetchUserDataError, messages.serverError]);
+    const users = JSON.parse(localStorage.getItem('safepass_users') || '[]');
+    const found = users.find((u) => u.id === userId);
+    if (found) {
+      setUser({ username: found.username, avatarUrl: found.avatarUrl || '' });
+    }
+  }, [navigate, notificationsRef]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -76,107 +51,60 @@ const Profile = ({ notificationsRef }) => {
     }
 
     const userId = localStorage.getItem('user_id');
-    if (!userId) {
-      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
-      setLoading(false);
-      return;
+    const users = JSON.parse(localStorage.getItem('safepass_users') || '[]');
+    const userIndex = users.findIndex((u) => u.id === userId);
+
+    if (userIndex !== -1) {
+      users[userIndex].password = btoa(formData.password);
+      localStorage.setItem('safepass_users', JSON.stringify(users));
     }
 
-    try {
-      const response = await fetch('http://localhost:8000/profile.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        notificationsRef.current.showSnackbar(messages.passwordUpdateSuccess, 'success');
-        setFormData({ password: '', confirmPassword: '' });
-      } else {
-        notificationsRef.current.showSnackbar(data.message || messages.passwordUpdateError, 'error');
-      }
-    } catch (err) {
-      notificationsRef.current.showSnackbar(messages.serverError, 'error');
-    } finally {
-      setLoading(false);
-    }
+    notificationsRef.current.showSnackbar(messages.passwordUpdateSuccess, 'success');
+    setFormData({ password: '', confirmPassword: '' });
+    setLoading(false);
   };
 
-  const handleUpload = async (event) => {
+  const handleUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const userId = localStorage.getItem('user_id');
-    if (!userId) {
-      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
-      return;
-    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const avatarUrl = reader.result;
+      const userId = localStorage.getItem('user_id');
+      const users = JSON.parse(localStorage.getItem('safepass_users') || '[]');
+      const userIndex = users.findIndex((u) => u.id === userId);
 
-    const formData = new FormData();
-    formData.append('avatar', file);
-    formData.append('user_id', userId);
-
-    try {
-      const response = await fetch('http://localhost:8000/profile.php', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        const userResponse = await fetch(`http://localhost:8000/profile.php?user_id=${userId}`);
-        const userData = await userResponse.json();
-        if (userData.success) {
-          setUser(userData.user);
-        }
-        notificationsRef.current.showSnackbar(messages.avatarUploadSuccess, 'success');
-      } else {
-        notificationsRef.current.showSnackbar(data.message || messages.avatarUploadError, 'error');
+      if (userIndex !== -1) {
+        users[userIndex].avatarUrl = avatarUrl;
+        localStorage.setItem('safepass_users', JSON.stringify(users));
+        setUser((prev) => ({ ...prev, avatarUrl }));
       }
-    } catch (err) {
-      notificationsRef.current.showSnackbar(messages.serverError, 'error');
-    }
+
+      notificationsRef.current.showSnackbar(messages.avatarUploadSuccess, 'success');
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handleRemove = async () => {
+  const handleRemove = () => {
     const userId = localStorage.getItem('user_id');
-    if (!userId) {
-      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
-      return;
+    const users = JSON.parse(localStorage.getItem('safepass_users') || '[]');
+    const userIndex = users.findIndex((u) => u.id === userId);
+
+    if (userIndex !== -1) {
+      users[userIndex].avatarUrl = '';
+      localStorage.setItem('safepass_users', JSON.stringify(users));
+      setUser((prev) => ({ ...prev, avatarUrl: '' }));
     }
 
-    try {
-      const response = await fetch(`http://localhost:8000/profile.php?user_id=${userId}`, {
-        method: 'DELETE',
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setUser((prev) => ({ ...prev, avatarUrl: '' }));
-        notificationsRef.current.showSnackbar(messages.avatarRemoveSuccess, 'success');
-      } else {
-        notificationsRef.current.showSnackbar(data.message || messages.avatarRemoveError, 'error');
-      }
-    } catch (err) {
-      notificationsRef.current.showSnackbar(messages.serverError, 'error');
-    }
-  };
-
-  const handleBackClick = () => {
-    navigate('/');
+    notificationsRef.current.showSnackbar(messages.avatarRemoveSuccess, 'success');
   };
 
   return (
     <Container maxWidth="sm" className="container">
       <Paper elevation={2} className="paper">
         <IconButton
-          onClick={handleBackClick}
+          onClick={() => navigate('/')}
           color="primary"
           className="backButton"
         >
@@ -193,9 +121,9 @@ const Profile = ({ notificationsRef }) => {
               <Avatar
                 sx={{ width: 100, height: 100 }}
                 src={user.avatarUrl}
-                alt={user.user}
+                alt={user.username}
               >
-                {user.user ? user.user[0].toUpperCase() : ''}
+                {user.username ? user.username[0].toUpperCase() : ''}
               </Avatar>
               <Box className="iconButton">
                 <IconButton color="primary" component="label">
@@ -215,9 +143,7 @@ const Profile = ({ notificationsRef }) => {
                 name="username"
                 value={user.username}
                 disabled
-                InputLabelProps={{
-                  className: 'textFieldLabel',
-                }}
+                InputLabelProps={{ className: 'textFieldLabel' }}
               />
             </Grid>
 
@@ -244,12 +170,7 @@ const Profile = ({ notificationsRef }) => {
             </Grid>
 
             <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                disabled={loading}
-              >
+              <Button type="submit" variant="contained" fullWidth disabled={loading}>
                 {loading ? 'Updating...' : 'Save'}
               </Button>
             </Grid>

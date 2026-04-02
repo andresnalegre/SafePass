@@ -22,15 +22,18 @@ const Register = ({ notificationsRef }) => {
   const navigate = useNavigate();
 
   const errorMessages = {
-    usernameRequired: 'Please enter a username',
-    passwordRequired: 'Please enter a password',
-    confirmPasswordRequired: 'Please confirm your password',
-    passwordsMismatch: 'Passwords do not match',
-    serverError: 'Error connecting to server',
+    usernameRequired: 'Please enter a username.',
+    passwordRequired: 'Please enter a password.',
+    confirmPasswordRequired: 'Please confirm your password.',
+    passwordsMismatch: 'Passwords do not match.',
+    invalidUsername: 'Use only lowercase letters and numbers.',
+    usernameExists: 'Username already exists.',
+    registrationSuccess: 'User registered successfully.',
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!username) {
       notificationsRef.current.showSnackbar(errorMessages.usernameRequired, 'error');
       return;
@@ -47,30 +50,30 @@ const Register = ({ notificationsRef }) => {
       notificationsRef.current.showSnackbar(errorMessages.passwordsMismatch, 'error');
       return;
     }
-    try {
-      const response = await fetch('http://localhost:8000/register.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          username,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        notificationsRef.current.showSnackbar(data.message, 'success');
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else {
-        notificationsRef.current.showSnackbar(data.message, 'error');
-      }
-    } catch (err) {
-      notificationsRef.current.showSnackbar(errorMessages.serverError, 'error');
+    if (!/^[a-z0-9]+$/.test(username)) {
+      notificationsRef.current.showSnackbar(errorMessages.invalidUsername, 'error');
+      return;
     }
+
+    const users = JSON.parse(localStorage.getItem('safepass_users') || '[]');
+    if (users.find((u) => u.username === username)) {
+      notificationsRef.current.showSnackbar(errorMessages.usernameExists, 'error');
+      return;
+    }
+
+    const newUser = {
+      id: Date.now().toString(),
+      username,
+      password: btoa(password),
+      avatarUrl: '',
+      createdAt: new Date().toISOString(),
+    };
+
+    users.push(newUser);
+    localStorage.setItem('safepass_users', JSON.stringify(users));
+
+    notificationsRef.current.showSnackbar(errorMessages.registrationSuccess, 'success');
+    setTimeout(() => navigate('/login'), 2000);
   };
 
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
@@ -107,9 +110,7 @@ const Register = ({ notificationsRef }) => {
                 autoFocus
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                InputProps={{
-                  className: 'registerTextField'
-                }}
+                InputProps={{ className: 'registerTextField' }}
               />
 
               <TextField

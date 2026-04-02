@@ -22,11 +22,12 @@ const ForgotPassword = ({ notificationsRef }) => {
   const navigate = useNavigate();
 
   const errorMessages = {
-    usernameRequired: 'Please enter a username',
-    newPasswordRequired: 'Please enter a new password',
-    confirmPasswordRequired: 'Please confirm your password',
-    passwordsMismatch: 'Passwords do not match',
-    serverError: 'Error connecting to server',
+    usernameRequired: 'Please enter a username.',
+    newPasswordRequired: 'Please enter a new password.',
+    confirmPasswordRequired: 'Please confirm your password.',
+    passwordsMismatch: 'Passwords do not match.',
+    userNotFound: 'User not found. Please check the username and try again.',
+    passwordUpdated: 'Password updated successfully.',
   };
 
   const handleSubmit = async (e) => {
@@ -36,46 +37,32 @@ const ForgotPassword = ({ notificationsRef }) => {
       notificationsRef.current.showSnackbar(errorMessages.usernameRequired, 'error');
       return;
     }
-
     if (!newPassword) {
       notificationsRef.current.showSnackbar(errorMessages.newPasswordRequired, 'error');
       return;
     }
-
     if (!confirmPassword) {
       notificationsRef.current.showSnackbar(errorMessages.confirmPasswordRequired, 'error');
       return;
     }
-
     if (newPassword !== confirmPassword) {
       notificationsRef.current.showSnackbar(errorMessages.passwordsMismatch, 'error');
       return;
     }
 
-    try {
-      const response = await fetch('http://localhost:8000/forgetpassword.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          username,
-          newPassword,
-        }),
-      });
+    const users = JSON.parse(localStorage.getItem('safepass_users') || '[]');
+    const userIndex = users.findIndex((u) => u.username === username);
 
-      const data = await response.json();
-      if (data.success) {
-        notificationsRef.current.showSnackbar(data.message, 'success');
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else {
-        notificationsRef.current.showSnackbar(data.message, 'error');
-      }
-    } catch (err) {
-      notificationsRef.current.showSnackbar(errorMessages.serverError, 'error');
+    if (userIndex === -1) {
+      notificationsRef.current.showSnackbar(errorMessages.userNotFound, 'error');
+      return;
     }
+
+    users[userIndex].password = btoa(newPassword);
+    localStorage.setItem('safepass_users', JSON.stringify(users));
+
+    notificationsRef.current.showSnackbar(errorMessages.passwordUpdated, 'success');
+    setTimeout(() => navigate('/login'), 2000);
   };
 
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
@@ -112,9 +99,7 @@ const ForgotPassword = ({ notificationsRef }) => {
                 autoFocus
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                InputProps={{
-                  className: 'resetTextField'
-                }}
+                InputProps={{ className: 'resetTextField' }}
               />
 
               <TextField

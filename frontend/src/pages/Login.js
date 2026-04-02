@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
   Container,
-  Box as SafeBox,
-  Paper as SafePaper,
-  Typography as SafeTypography,
-  TextField as SafeTextField,
-  Button as SafeButton,
-  IconButton as SafeIconButton,
-  InputAdornment as SafeInputAdornment,
-  Link as SafeLink
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  IconButton,
+  InputAdornment,
+  Link
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
@@ -24,7 +24,7 @@ const Login = ({ notificationsRef }) => {
 
   const errorMessages = {
     loginSuccess: 'Login successful!',
-    invalidCredentials: 'Invalid credentials',
+    invalidCredentials: 'Invalid credentials.',
     serverError: 'Error connecting to the server.',
   };
 
@@ -37,35 +37,24 @@ const Login = ({ notificationsRef }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:8000/login.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          username,
-          password,
-        }),
-      });
-  
-      const data = await response.json();
-      if (data.success) {
-        localStorage.setItem('user_id', data.user_id);
-        localStorage.setItem('username', username);
 
-        notificationsRef.current.showSnackbar(errorMessages.loginSuccess, 'success');
+    const users = JSON.parse(localStorage.getItem('safepass_users') || '[]');
+    const user = users.find((u) => u.username === username);
 
-        setTimeout(() => {
-          notificationsRef.current.showSnackbar(data.message, 'success');
-          navigate('/');
-        }, 1000);
-      } else {
-        notificationsRef.current.showSnackbar(data.message || errorMessages.invalidCredentials, 'error');
-      }
-    } catch (error) {
-      notificationsRef.current.showSnackbar(errorMessages.serverError, 'error');
+    if (!user || user.password !== btoa(password)) {
+      notificationsRef.current.showSnackbar(errorMessages.invalidCredentials, 'error');
+      return;
     }
+
+    localStorage.setItem('user_id', user.id);
+    localStorage.setItem('username', username);
+
+    notificationsRef.current.showSnackbar(errorMessages.loginSuccess, 'success');
+
+    setTimeout(() => {
+      notificationsRef.current.showSnackbar(`Welcome, ${username}!`, 'success');
+      navigate('/');
+    }, 1000);
   };
 
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
@@ -73,25 +62,25 @@ const Login = ({ notificationsRef }) => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <SafeBox className="safeContainer">
-        <SafePaper className="safePaper" elevation={3}>
-          <SafeBox className="safeHeader">
-            <SafeBox
+      <Box className="safeContainer">
+        <Paper className="safePaper" elevation={3}>
+          <Box className="safeHeader">
+            <Box
               component="img"
               src={SafePassImage}
               alt="SafePass"
               className="safeLogo"
             />
-            <SafeTypography component="h1" variant="h5" className="safeTitle">
+            <Typography component="h1" variant="h5" className="safeTitle">
               Welcome to SafePass
-            </SafeTypography>
-            <SafeTypography variant="body2" color="text.secondary" align="center">
+            </Typography>
+            <Typography variant="body2" color="text.secondary" align="center">
               All passwords under your control
-            </SafeTypography>
-          </SafeBox>
+            </Typography>
+          </Box>
 
           <form onSubmit={handleSubmit} noValidate>
-            <SafeTextField
+            <TextField
               required
               fullWidth
               margin="normal"
@@ -102,12 +91,10 @@ const Login = ({ notificationsRef }) => {
               autoFocus
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              InputProps={{
-                className: 'safeTextField'
-              }}
+              InputProps={{ className: 'safeTextField' }}
             />
 
-            <SafeTextField
+            <TextField
               required
               fullWidth
               margin="normal"
@@ -121,35 +108,35 @@ const Login = ({ notificationsRef }) => {
               InputProps={{
                 className: 'safeTextField',
                 endAdornment: (
-                  <SafeInputAdornment position="end">
-                    <SafeIconButton
+                  <InputAdornment position="end">
+                    <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </SafeIconButton>
-                  </SafeInputAdornment>
+                    </IconButton>
+                  </InputAdornment>
                 ),
               }}
             />
 
-            <SafeButton type="submit" fullWidth variant="contained" className="safeSubmitButton">
+            <Button type="submit" fullWidth variant="contained" className="safeSubmitButton">
               Sign In
-            </SafeButton>
+            </Button>
 
-            <SafeBox className="safeLinkContainer">
-              <SafeLink component={RouterLink} to="/register" variant="body2" className="safeLink">
-                Sign Up 
-              </SafeLink>
-              <SafeLink component={RouterLink} to="/forgot-password" variant="body2" className="safeLink">
+            <Box className="safeLinkContainer">
+              <Link component={RouterLink} to="/register" variant="body2" className="safeLink">
+                Sign Up
+              </Link>
+              <Link component={RouterLink} to="/forgot-password" variant="body2" className="safeLink">
                 Forgot Password?
-              </SafeLink>
-            </SafeBox>
+              </Link>
+            </Box>
           </form>
-        </SafePaper>
-      </SafeBox>
+        </Paper>
+      </Box>
     </Container>
   );
 };

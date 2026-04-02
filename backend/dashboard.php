@@ -12,32 +12,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require_once 'database.php';
 
 const MESSAGES = [
-    'passwordsFound' => 'Passwords found.',
-    'noPasswordsFound' => 'No passwords found.',
-    'fetchPasswordsError' => 'Error fetching passwords.',
-    'allFieldsRequired' => 'All fields are required.',
-    'passwordCreated' => 'Password created.',
-    'createPasswordError' => 'Error creating password.',
-    'passwordUpdated' => 'Password updated.',
-    'updatePasswordError' => 'Error updating password.',
-    'passwordDeleted' => 'Password deleted.',
-    'noPasswordFound' => 'No password found with the given ID.',
-    'deletePasswordError' => 'Error deleting password.',
-    'usernameNotProvided' => 'Username not provided.',
-    'invalidData' => 'Invalid data.',
+    'passwordsFound'       => 'Passwords found.',
+    'noPasswordsFound'     => 'No passwords found.',
+    'fetchPasswordsError'  => 'Error fetching passwords.',
+    'allFieldsRequired'    => 'All fields are required.',
+    'passwordCreated'      => 'Password created.',
+    'createPasswordError'  => 'Error creating password.',
+    'passwordUpdated'      => 'Password updated.',
+    'updatePasswordError'  => 'Error updating password.',
+    'passwordDeleted'      => 'Password deleted.',
+    'noPasswordFound'      => 'No password found with the given ID.',
+    'deletePasswordError'  => 'Error deleting password.',
+    'usernameNotProvided'  => 'Username not provided.',
+    'invalidData'          => 'Invalid data.',
     'invalidDataForUpdate' => 'Invalid data for update.',
-    'idNotProvided' => 'ID not provided.',
-    'methodNotAllowed' => 'Method not allowed.',
-    'serverError' => 'Server error.'
+    'idNotProvided'        => 'ID not provided.',
+    'methodNotAllowed'     => 'Method not allowed.',
+    'serverError'          => 'Server error.'
 ];
 
 try {
-    $db = Database::getInstance();
+    $db   = Database::getInstance();
     $conn = $db->getConnection();
 
     function getPasswords($conn, $username) {
         try {
-            // Atualiza o last_login para o timestamp atual
             $stmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE username = ?");
             $stmt->bind_param("s", $username);
             if (!$stmt->execute()) {
@@ -47,11 +46,14 @@ try {
             $stmt = $conn->prepare("SELECT id, title, username, password FROM dashboard WHERE created_by = ?");
             $stmt->bind_param("s", $username);
             $stmt->execute();
-            $result = $stmt->get_result();
-            
+            $result    = $stmt->get_result();
             $passwords = $result->fetch_all(MYSQLI_ASSOC);
-            
-            return ['success' => true, 'passwords' => $passwords ?: [], 'message' => $passwords ? MESSAGES['passwordsFound'] : MESSAGES['noPasswordsFound']];
+
+            return [
+                'success'   => true,
+                'passwords' => $passwords ?: [],
+                'message'   => $passwords ? MESSAGES['passwordsFound'] : MESSAGES['noPasswordsFound']
+            ];
         } catch (Exception $e) {
             error_log("Error fetching passwords: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['fetchPasswordsError']];
@@ -68,13 +70,12 @@ try {
             $stmt->bind_param("ssss", $data['title'], $data['username'], $data['password'], $data['created_by']);
             if ($stmt->execute()) {
                 return [
-                    'success' => true, 
-                    'message' => MESSAGES['passwordCreated'], 
-                    'id' => $conn->insert_id
+                    'success' => true,
+                    'message' => MESSAGES['passwordCreated'],
+                    'id'      => $conn->insert_id
                 ];
-            } else {
-                return ['success' => false, 'message' => MESSAGES['createPasswordError']];
             }
+            return ['success' => false, 'message' => MESSAGES['createPasswordError']];
         } catch (Exception $e) {
             error_log("Error creating password: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['createPasswordError']];
@@ -91,9 +92,8 @@ try {
             $stmt->bind_param("sssi", $data['title'], $data['username'], $data['password'], $id);
             if ($stmt->execute()) {
                 return ['success' => true, 'message' => MESSAGES['passwordUpdated']];
-            } else {
-                return ['success' => false, 'message' => MESSAGES['updatePasswordError']];
             }
+            return ['success' => false, 'message' => MESSAGES['updatePasswordError']];
         } catch (Exception $e) {
             error_log("Error updating password: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['updatePasswordError']];
@@ -108,9 +108,8 @@ try {
 
             if ($stmt->affected_rows > 0) {
                 return ['success' => true, 'message' => MESSAGES['passwordDeleted']];
-            } else {
-                return ['success' => false, 'message' => MESSAGES['noPasswordFound']];
             }
+            return ['success' => false, 'message' => MESSAGES['noPasswordFound']];
         } catch (Exception $e) {
             error_log("Error deleting password: " . $e->getMessage());
             return ['success' => false, 'message' => MESSAGES['deletePasswordError']];
@@ -138,7 +137,7 @@ try {
 
         case 'PUT':
             $input = json_decode(file_get_contents("php://input"), true);
-            $id = $_GET['id'] ?? null;
+            $id    = $_GET['id'] ?? null;
             if ($id && isset($input['title'], $input['username'], $input['password'])) {
                 echo json_encode(updatePassword($conn, $id, $input));
             } else {
@@ -148,7 +147,7 @@ try {
 
         case 'DELETE':
             $input = json_decode(file_get_contents("php://input"), true);
-            $id = $input['id'] ?? null;
+            $id    = $input['id'] ?? null;
             if ($id) {
                 echo json_encode(deletePassword($conn, $id));
             } else {
@@ -161,13 +160,10 @@ try {
             echo json_encode(['success' => false, 'message' => MESSAGES['methodNotAllowed']]);
             break;
     }
-    
+
 } catch (Exception $e) {
     error_log("General error: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode([
-        'success' => false, 
-        'message' => MESSAGES['serverError']
-    ]);
+    echo json_encode(['success' => false, 'message' => MESSAGES['serverError']]);
 }
 ?>

@@ -7,7 +7,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 require_once 'database.php';
 
 try {
-    $db = Database::getInstance();
+    $db   = Database::getInstance();
     $conn = $db->getConnection();
 
     function getUserProfile($conn, $userId) {
@@ -16,42 +16,41 @@ try {
             $stmt->bind_param("i", $userId);
             $stmt->execute();
             $result = $stmt->get_result();
-            
-            $user = $result->fetch_assoc();
-            
+            $user   = $result->fetch_assoc();
+
             if ($user) {
-                $user['avatarUrl'] = $user['avatar_url'] 
-                    ? 'http://localhost:8000/' . $user['avatar_url'] 
+                $user['avatarUrl'] = $user['avatar_url']
+                    ? 'http://localhost:8000/' . $user['avatar_url']
                     : null;
                 return ['success' => true, 'user' => $user];
             }
-            
-            return ['success' => false, 'message' => 'User was not found!'];
+
+            return ['success' => false, 'message' => 'User not found.'];
         } catch (Exception $e) {
             error_log("Error fetching profile: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error fetching profile'];
+            return ['success' => false, 'message' => 'Error fetching profile.'];
         }
     }
 
     function uploadAvatar($conn, $userId, $file) {
         try {
             $targetDir = "uploads/";
-            
+
             if (!is_dir($targetDir)) {
                 mkdir($targetDir, 0777, true);
             }
 
-            $fileName = uniqid() . '-' . basename($file['name']);
+            $fileName       = uniqid() . '-' . basename($file['name']);
             $targetFilePath = $targetDir . $fileName;
-            $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+            $fileType       = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
 
             $allowTypes = ['jpg', 'jpeg', 'png', 'gif'];
             if (!in_array($fileType, $allowTypes)) {
-                return ['success' => false, 'message' => 'File type not allowed!'];
+                return ['success' => false, 'message' => 'File type not allowed.'];
             }
 
             if ($file['size'] > 5 * 1024 * 1024) {
-                return ['success' => false, 'message' => 'File is too large!'];
+                return ['success' => false, 'message' => 'File is too large.'];
             }
 
             if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
@@ -60,15 +59,15 @@ try {
                 $stmt->execute();
 
                 return [
-                    'success' => true, 
+                    'success'   => true,
                     'avatarUrl' => 'http://localhost:8000/' . $targetFilePath
                 ];
             }
 
-            return ['success' => false, 'message' => 'Upload has failed!'];
+            return ['success' => false, 'message' => 'Upload failed.'];
         } catch (Exception $e) {
             error_log("Upload error: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Upload error'];
+            return ['success' => false, 'message' => 'Upload error.'];
         }
     }
 
@@ -78,7 +77,7 @@ try {
             $stmt->bind_param("i", $userId);
             $stmt->execute();
             $result = $stmt->get_result();
-            $user = $result->fetch_assoc();
+            $user   = $result->fetch_assoc();
 
             if ($user && $user['avatar_url']) {
                 $filePath = $user['avatar_url'];
@@ -91,28 +90,28 @@ try {
                 $stmt->bind_param("i", $userId);
                 $stmt->execute();
 
-                return ['success' => true, 'message' => 'Avatar removed successfully'];
+                return ['success' => true, 'message' => 'Avatar removed successfully.'];
             }
 
-            return ['success' => false, 'message' => 'Avatar not found'];
+            return ['success' => false, 'message' => 'Avatar not found.'];
         } catch (Exception $e) {
             error_log("Error removing avatar: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error removing avatar'];
+            return ['success' => false, 'message' => 'Error removing avatar.'];
         }
     }
 
     function updatePassword($conn, $userId, $newPassword) {
         try {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-            
+
             $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
             $stmt->bind_param("si", $hashedPassword, $userId);
             $stmt->execute();
-            
-            return ['success' => true, 'message' => 'Password updated'];
+
+            return ['success' => true, 'message' => 'Password updated.'];
         } catch (Exception $e) {
             error_log("Error updating password: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Failed to update password'];
+            return ['success' => false, 'message' => 'Failed to update password.'];
         }
     }
 
@@ -121,7 +120,7 @@ try {
         if ($userId) {
             echo json_encode(getUserProfile($conn, $userId));
         } else {
-            echo json_encode(['success' => false, 'message' => 'User ID not provided']);
+            echo json_encode(['success' => false, 'message' => 'User ID not provided.']);
         }
     }
 
@@ -134,28 +133,24 @@ try {
             if ($userId) {
                 echo json_encode(uploadAvatar($conn, $userId, $_FILES['avatar']));
             } else {
-                echo json_encode(['success' => false, 'message' => 'User ID not provided']);
+                echo json_encode(['success' => false, 'message' => 'User ID not provided.']);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid data']);
+            echo json_encode(['success' => false, 'message' => 'Invalid data.']);
         }
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         $userId = $_GET['user_id'] ?? null;
-    
         if ($userId) {
             echo json_encode(removeAvatar($conn, $userId));
         } else {
-            echo json_encode(['success' => false, 'message' => 'User ID not provided']);
+            echo json_encode(['success' => false, 'message' => 'User ID not provided.']);
         }
     }
-    
+
 } catch (Exception $e) {
     error_log("General error: " . $e->getMessage());
-    echo json_encode([
-        'success' => false, 
-        'message' => 'Server error: ' . $e->getMessage()
-    ]);
+    echo json_encode(['success' => false, 'message' => 'Server error.']);
 }
 ?>

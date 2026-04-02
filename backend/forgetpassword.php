@@ -7,13 +7,13 @@ header("Content-Type: application/json");
 include_once 'database.php';
 
 const MESSAGES = [
-    'userNotFound' => 'User was not found! Please check the username and try again.',
-    'passwordUpdated' => 'Password updated successfully!',
-    'serverError' => 'Error connecting to server.'
+    'userNotFound'    => 'User not found. Please check the username and try again.',
+    'passwordUpdated' => 'Password updated successfully.',
+    'serverError'     => 'Error connecting to server.'
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? null;
+    $username    = $_POST['username'] ?? null;
     $newPassword = $_POST['newPassword'] ?? null;
 
     if (!$username || !$newPassword) {
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        $db = Database::getInstance();
+        $db   = Database::getInstance();
         $conn = $db->getConnection();
 
         $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result->num_rows > 0) {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
+            $stmt           = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
             $stmt->bind_param("ss", $hashedPassword, $username);
             if ($stmt->execute()) {
                 echo json_encode(['success' => true, 'message' => MESSAGES['passwordUpdated']]);

@@ -1,6 +1,6 @@
 {
   "short_name": "SafePass",
-  "name": "Safepass",
+  "name": "SafePass",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "./assets/logo.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "500x500"
     }
   ],
-  "start_url": ".",
+  "start_url": "/SafePass/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
