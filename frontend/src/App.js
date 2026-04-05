@@ -13,6 +13,10 @@ import { ThemeProvider } from './styles/Theme';
 function App() {
   const notificationsRef = useRef();
 
+  const isAuthenticated = () => {
+    return !!localStorage.getItem('username') && !!localStorage.getItem('user_id');
+  };
+
   const WithFooter = ({ children }) => (
     <div>
       {children}
@@ -23,15 +27,32 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/dashboard" element={<Navigate to="/" />} />
         <Route
           path="/"
           element={
-            <ThemeProvider>
-              <WithFooter>
-                <Dashboard notificationsRef={notificationsRef} />
-              </WithFooter>
-            </ThemeProvider>
+            isAuthenticated()
+              ? (
+                <ThemeProvider>
+                  <WithFooter>
+                    <Dashboard notificationsRef={notificationsRef} />
+                  </WithFooter>
+                </ThemeProvider>
+              )
+              : <Login notificationsRef={notificationsRef} />
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            isAuthenticated()
+              ? (
+                <ThemeProvider>
+                  <WithFooter>
+                    <Dashboard notificationsRef={notificationsRef} />
+                  </WithFooter>
+                </ThemeProvider>
+              )
+              : <Navigate to="/" />
           }
         />
         <Route
@@ -52,7 +73,7 @@ function App() {
             </ThemeProvider>
           }
         />
-        <Route path="/login" element={<Login notificationsRef={notificationsRef} />} />
+        <Route path="/login" element={<Navigate to="/" />} />
         <Route path="/register" element={<Register notificationsRef={notificationsRef} />} />
         <Route path="/forgot-password" element={<ForgetPassword notificationsRef={notificationsRef} />} />
       </Routes>
