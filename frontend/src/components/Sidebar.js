@@ -1,4 +1,3 @@
-// Sidebar.js
 import React, { useMemo } from 'react';
 import {
   Box,
@@ -17,7 +16,7 @@ import {
   Info as InfoIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import SafePassImage from '../assets/SafePass.png';
+import SafePassImage from '../assets/SafePass.svg';
 import '../styles/styles.css';
 
 const MENU_ITEMS = [
@@ -34,8 +33,8 @@ const Sidebar = ({ mobileOpen, onDrawerToggle }) => {
   const drawer = useMemo(() => (
     <Box>
       <Toolbar className="sidebarToolbar">
-        <img 
-          src={SafePassImage} 
+        <img
+          src={SafePassImage}
           alt="SafePass"
           className="sidebarLogo"
           draggable="false"

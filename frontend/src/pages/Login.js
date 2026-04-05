@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-import SafePassImage from '../assets/logo.png';
+import SafePassImage from '../assets/logo.svg';
 import '../styles/styles.css';
 
 const Login = ({ notificationsRef }) => {
