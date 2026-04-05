@@ -1,3 +1,4 @@
+// Profile.js
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Paper, Box, TextField, Button, Avatar, Grid, IconButton } from '@mui/material';
 import { PhotoCamera, Delete, ArrowBack } from '@mui/icons-material';
@@ -7,11 +8,11 @@ import '../styles/styles.css';
 const Profile = ({ notificationsRef }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({ username: '', avatarUrl: '' });
   const [formData, setFormData] = useState({ password: '', confirmPassword: '' });
 
   const messages = {
-    userNotLoggedIn: 'User not logged.',
     passwordsMismatch: 'Passwords do not match.',
     passwordUpdateSuccess: 'Password updated successfully.',
     avatarUploadSuccess: 'Avatar uploaded successfully.',
@@ -22,8 +23,7 @@ const Profile = ({ notificationsRef }) => {
     const userId = localStorage.getItem('user_id');
     const username = localStorage.getItem('username');
 
-    if (!userId) {
-      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
+    if (!userId || !username) {
       navigate('/login');
       return;
     }
@@ -33,7 +33,9 @@ const Profile = ({ notificationsRef }) => {
     if (found) {
       setUser({ username: found.username, avatarUrl: found.avatarUrl || '' });
     }
-  }, [navigate, notificationsRef]);
+
+    setIsAuthenticated(true);
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -99,6 +101,8 @@ const Profile = ({ notificationsRef }) => {
 
     notificationsRef.current.showSnackbar(messages.avatarRemoveSuccess, 'success');
   };
+
+  if (!isAuthenticated) return null;
 
   return (
     <Container maxWidth="sm" className="container">

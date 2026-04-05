@@ -1,3 +1,4 @@
+// About.js
 import React, { useState, useEffect } from 'react';
 import { 
   Container, 
@@ -12,9 +13,10 @@ import {
   Grid,
   Link
 } from '@mui/material';
-import { Update } from '@mui/icons-material';
+import { Update, Storage as StorageIcon, Public as PublicIcon } from '@mui/icons-material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import PersonIcon from '@mui/icons-material/Person';
+import CodeIcon from '@mui/icons-material/Code';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -23,23 +25,25 @@ import '../styles/styles.css';
 const About = ({ notificationsRef }) => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkAuthentication = () => {
-      const storedUserName = localStorage.getItem('username');
-      
-      if (!storedUserName) {
-        notificationsRef.current.showSnackbar('User not logged', 'error');
-        navigate('/login');
-      }
-    };
+    const storedUserName = localStorage.getItem('username');
+    const storedUserId = localStorage.getItem('user_id');
 
-    checkAuthentication();
-  }, [navigate, notificationsRef]);
+    if (!storedUserName || !storedUserId) {
+      navigate('/login');
+      return;
+    }
+
+    setIsAuthenticated(true);
+  }, [navigate]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  if (!isAuthenticated) return null;
 
   return (
     <Box className="aboutContainer">
@@ -77,6 +81,36 @@ const About = ({ notificationsRef }) => {
                   </ListItemIcon>
                   <ListItemText 
                     primary="Personal Project" 
+                  />
+                </ListItem>
+
+                <ListItem>
+                  <ListItemIcon>
+                    <CodeIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Stack" 
+                    secondary="React + Material UI"
+                  />
+                </ListItem>
+
+                <ListItem>
+                  <ListItemIcon>
+                    <StorageIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Storage" 
+                    secondary="localStorage"
+                  />
+                </ListItem>
+
+                <ListItem>
+                  <ListItemIcon>
+                    <PublicIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Deploy" 
+                    secondary="Hosted by GitHub Pages"
                   />
                 </ListItem>
 

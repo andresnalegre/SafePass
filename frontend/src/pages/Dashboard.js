@@ -1,3 +1,4 @@
+// Dashboard.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -46,10 +47,10 @@ const Dashboard = ({ notificationsRef }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSaveEnabled, setIsSaveEnabled] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   const messages = {
-    userNotLoggedIn: 'User not logged.',
     copyPasswordSuccess: 'Password copied to clipboard.',
     copyPasswordError: 'Failed to copy password.',
     deletePasswordSuccess: 'Password deleted successfully.',
@@ -59,19 +60,20 @@ const Dashboard = ({ notificationsRef }) => {
 
   useEffect(() => {
     const storedUserName = localStorage.getItem('username');
+    const storedUserId = localStorage.getItem('user_id');
 
-    if (!storedUserName) {
-      notificationsRef.current.showSnackbar(messages.userNotLoggedIn, 'error');
+    if (!storedUserName || !storedUserId) {
       navigate('/login');
       return;
     }
 
+    setIsAuthenticated(true);
     setUserName(storedUserName);
 
     const allPasswords = JSON.parse(localStorage.getItem(PASSWORDS_KEY) || '[]');
     const userPasswords = allPasswords.filter((p) => p.created_by === storedUserName);
     setPasswords(userPasswords);
-  }, [navigate, notificationsRef]);
+  }, [navigate]);
 
   const savePasswordsToStorage = (updatedPasswords, currentUser) => {
     const allPasswords = JSON.parse(localStorage.getItem(PASSWORDS_KEY) || '[]');
@@ -161,6 +163,8 @@ const Dashboard = ({ notificationsRef }) => {
     (password.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
     (password.username?.toLowerCase() || '').includes(searchQuery.toLowerCase())
   );
+
+  if (!isAuthenticated) return null;
 
   return (
     <Box className="dashContainer">
