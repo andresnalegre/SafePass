@@ -52,7 +52,7 @@ const Login = ({ notificationsRef }) => {
 
     setTimeout(() => {
       notificationsRef.current.showSnackbar(`Welcome, ${username}!`, 'success');
-      window.location.href = window.location.origin + window.location.pathname;
+      window.location.reload();
     }, 1000);
   };
 
