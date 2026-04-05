@@ -1,4 +1,3 @@
-// Profile.js
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Paper, Box, TextField, Button, Avatar, Grid, IconButton } from '@mui/material';
 import { PhotoCamera, Delete, ArrowBack } from '@mui/icons-material';
@@ -24,7 +23,7 @@ const Profile = ({ notificationsRef }) => {
     const username = localStorage.getItem('username');
 
     if (!userId || !username) {
-      navigate('/login');
+      navigate('/');
       return;
     }
 

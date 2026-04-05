@@ -30,7 +30,7 @@ const About = ({ notificationsRef }) => {
     const storedUserId = localStorage.getItem('user_id');
 
     if (!storedUserName || !storedUserId) {
-      navigate('/login');
+      navigate('/');
       return;
     }
 
@@ -58,10 +58,7 @@ const About = ({ notificationsRef }) => {
           className="aboutContentContainer"
         >
           <Grid item xs={12} sm={10} md={8} lg={8}>
-            <Paper 
-              elevation={4} 
-              className="aboutPaper"
-            >
+            <Paper elevation={4} className="aboutPaper">
               <Box className="aboutTitleBox">
                 <Typography variant="h4" component="h1">
                   About SafePass

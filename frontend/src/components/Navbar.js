@@ -1,4 +1,3 @@
-// Navbar.js
 import React, { useState, useCallback } from 'react';
 import {
   AppBar,
@@ -51,7 +50,7 @@ const Navbar = ({ onDrawerToggle }) => {
     localStorage.removeItem('user_id');
     localStorage.removeItem('username');
     sessionStorage.clear();
-    navigate('/login', { state: { logoutMessage: 'See you next time!' } });
+    navigate('/', { state: { logoutMessage: 'See you next time!' } });
     handleMenuClose();
   }, [navigate, handleMenuClose]);
 

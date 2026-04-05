@@ -1,4 +1,3 @@
-// Dashboard.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -63,7 +62,7 @@ const Dashboard = ({ notificationsRef }) => {
     const storedUserId = localStorage.getItem('user_id');
 
     if (!storedUserName || !storedUserId) {
-      navigate('/login');
+      navigate('/');
       return;
     }
 
