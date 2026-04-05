@@ -12,8 +12,9 @@ import {
   Grid,
   Link
 } from '@mui/material';
-import { Code, Update } from '@mui/icons-material';
+import { Update } from '@mui/icons-material';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import PersonIcon from '@mui/icons-material/Person';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -66,17 +67,16 @@ const About = ({ notificationsRef }) => {
               </Box>
 
               <Typography variant="body1" paragraph className="aboutSubtitle">
-                SafePass  is a platform that helps you create stronger passwords and manage them easily.
+                SafePass is a platform that helps you create stronger passwords and manage them easily.
               </Typography>
 
               <List>
                 <ListItem>
                   <ListItemIcon>
-                    <Code color="primary" />
+                    <PersonIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText 
-                    primary="IT Career Switch Project" 
-                    secondary="Final Project"
+                    primary="Personal Project" 
                   />
                 </ListItem>
 
