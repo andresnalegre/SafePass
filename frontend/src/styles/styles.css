@@ -9,6 +9,10 @@ body {
     padding: 0;
 }
 
+body.dark-mode {
+    background-color: #1a1a2e;
+}
+
 /* Login */
 .safeContainer {
     min-height: 100vh;
@@ -18,6 +22,10 @@ body {
     justify-content: center;
     background-color: #f0f2f5;
     padding: 16px;
+}
+
+body.dark-mode .safeContainer {
+    background-color: #1a1a2e;
 }
 
 .safePaper {
@@ -98,6 +106,10 @@ body {
     padding: 16px;
 }
 
+body.dark-mode .registerContainer {
+    background-color: #1a1a2e;
+}
+
 .registerBackButton {
     position: fixed !important;
     top: 16px !important;
@@ -172,6 +184,10 @@ body {
     justify-content: center;
     background-color: #f0f2f5;
     padding: 16px;
+}
+
+body.dark-mode .resetContainer {
+    background-color: #1a1a2e;
 }
 
 .resetBackButton {
@@ -284,7 +300,11 @@ body {
     align-items: center !important;
     gap: 8px !important;
     user-select: none !important;
-    background-color: #8e8e8e !important;
+    background-color: #6b6b6b !important;
+}
+
+body.dark-mode .sidebarToolbar {
+    background-color: #0f0f23 !important;
 }
 
 .sidebarLogo {
@@ -305,6 +325,13 @@ body {
     overflow-y: auto !important;
     background-color: #ffffff !important;
     color: #000000 !important;
+    border-right: 1px solid #e0e0e0 !important;
+}
+
+body.dark-mode .sidebarDrawerPaper {
+    background-color: #16213e !important;
+    color: #e0e0e0 !important;
+    border-right: 1px solid #2a2a4a !important;
 }
 
 .sidebarNav {
@@ -322,6 +349,10 @@ body {
     display: flex;
     background-color: #f0f2f5;
     min-height: 100vh;
+}
+
+body.dark-mode .dashContainer {
+    background-color: #1a1a2e;
 }
 
 .dashMain {
@@ -403,8 +434,8 @@ body {
 }
 
 body.dark-mode .passText {
-    background-color: #333333;
-    color: #f5f5f5;
+    background-color: #0f0f23;
+    color: #e0e0e0;
 }
 
 /* PasswordGenerator */
@@ -464,6 +495,10 @@ body.dark-mode .passText {
     background-color: #f0f2f5;
 }
 
+body.dark-mode .aboutContainer {
+    background-color: #1a1a2e;
+}
+
 .aboutContentContainer {
     display: flex;
     justify-content: center;
@@ -486,6 +521,11 @@ body.dark-mode .passText {
     height: auto;
     margin-top: 70px;
     margin-bottom: 40px;
+}
+
+body.dark-mode .aboutPaper {
+    background-color: #16213e;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .aboutTitleBox {
@@ -520,12 +560,20 @@ body.dark-mode .passText {
     background-color: #f0f2f5;
 }
 
+body.dark-mode .container {
+    background-color: #1a1a2e;
+}
+
 .paper {
     padding: 24px;
     text-align: center;
     position: relative;
     width: 100%;
     background-color: #ffffff;
+}
+
+body.dark-mode .paper {
+    background-color: #16213e;
 }
 
 .backButton {
@@ -583,7 +631,7 @@ body.light-mode .footer {
 }
 
 body.dark-mode .footer {
-    background-color: #424242;
+    background-color: #0f0f23;
     color: #b7b2b2;
 }
 
