@@ -239,6 +239,11 @@
     margin-left: auto;
 }
 
+.navAppBarMobile {
+    width: 100%;
+    margin-left: 0;
+}
+
 .navMenuButton {
     margin-right: 16px;
     display: none;
@@ -591,6 +596,7 @@ body.dark-mode .footer {
 
     .sidebarDrawerPaper {
         width: 240px !important;
+        height: 100vh !important;
     }
 
     .dashMain {

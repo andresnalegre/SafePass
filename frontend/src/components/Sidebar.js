@@ -1,3 +1,4 @@
+// Sidebar.js
 import React, { useMemo } from 'react';
 import {
   Box,
@@ -8,6 +9,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import {
   Dashboard,
@@ -25,6 +28,8 @@ const MENU_ITEMS = [
 const Sidebar = ({ mobileOpen, onDrawerToggle }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const drawer = useMemo(() => (
     <Box>
@@ -42,7 +47,10 @@ const Sidebar = ({ mobileOpen, onDrawerToggle }) => {
           <ListItem
             button
             key={item.text}
-            onClick={() => navigate(item.path)}
+            onClick={() => {
+              navigate(item.path);
+              if (isMobile) onDrawerToggle();
+            }}
             selected={location.pathname === item.path}
           >
             <ListItemIcon>{item.icon}</ListItemIcon>
@@ -51,7 +59,7 @@ const Sidebar = ({ mobileOpen, onDrawerToggle }) => {
         ))}
       </List>
     </Box>
-  ), [location.pathname, navigate]);
+  ), [location.pathname, navigate, isMobile, onDrawerToggle]);
 
   return (
     <Box component="nav" className="sidebarNav">
@@ -64,13 +72,16 @@ const Sidebar = ({ mobileOpen, onDrawerToggle }) => {
       >
         {drawer}
       </Drawer>
-      <Drawer
-        variant="permanent"
-        open
-        classes={{ paper: 'sidebarDrawerPaper' }}
-      >
-        {drawer}
-      </Drawer>
+
+      {!isMobile && (
+        <Drawer
+          variant="permanent"
+          open
+          classes={{ paper: 'sidebarDrawerPaper' }}
+        >
+          {drawer}
+        </Drawer>
+      )}
     </Box>
   );
 };

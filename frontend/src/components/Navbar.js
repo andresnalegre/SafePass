@@ -1,3 +1,4 @@
+// Navbar.js
 import React, { useState, useCallback } from 'react';
 import {
   AppBar,
@@ -6,17 +7,21 @@ import {
   Menu,
   MenuItem,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { Settings as SettingsIcon, Brightness4, Brightness7 } from '@mui/icons-material';
+import { Settings as SettingsIcon, Brightness4, Brightness7, Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTheme } from '../styles/Theme';
+import { useTheme as useAppTheme } from '../styles/Theme';
 import '../styles/styles.css';
 
-const Navbar = () => {
+const Navbar = ({ onDrawerToggle }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { darkMode, toggleDarkMode } = useTheme();
+  const { darkMode, toggleDarkMode } = useAppTheme();
   const [anchorEl, setAnchorEl] = useState(null);
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
 
   const getPageTitle = () => {
     switch (location.pathname) {
@@ -51,8 +56,19 @@ const Navbar = () => {
   }, [navigate, handleMenuClose]);
 
   return (
-    <AppBar position="fixed" className="navAppBar">
+    <AppBar position="fixed" className={isMobile ? 'navAppBarMobile' : 'navAppBar'}>
       <Toolbar>
+        {isMobile && (
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={onDrawerToggle}
+            aria-label="Open menu"
+            sx={{ mr: 1 }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
         <Typography variant="h6" className="navDashboardText noSelect">
           {getPageTitle()}
         </Typography>
