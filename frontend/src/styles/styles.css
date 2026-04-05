@@ -10,7 +10,7 @@ body {
 }
 
 body.dark-mode {
-    background-color: #1a1a2e;
+    background-color: #2b2b2b;
 }
 
 /* Login */
@@ -25,7 +25,7 @@ body.dark-mode {
 }
 
 body.dark-mode .safeContainer {
-    background-color: #1a1a2e;
+    background-color: #2b2b2b;
 }
 
 .safePaper {
@@ -107,7 +107,7 @@ body.dark-mode .safeContainer {
 }
 
 body.dark-mode .registerContainer {
-    background-color: #1a1a2e;
+    background-color: #2b2b2b;
 }
 
 .registerBackButton {
@@ -187,7 +187,7 @@ body.dark-mode .registerContainer {
 }
 
 body.dark-mode .resetContainer {
-    background-color: #1a1a2e;
+    background-color: #2b2b2b;
 }
 
 .resetBackButton {
@@ -300,11 +300,11 @@ body.dark-mode .resetContainer {
     align-items: center !important;
     gap: 8px !important;
     user-select: none !important;
-    background-color: #6b6b6b !important;
+    background-color: #e8e8e8 !important;
 }
 
 body.dark-mode .sidebarToolbar {
-    background-color: #0f0f23 !important;
+    background-color: #1e1e1e !important;
 }
 
 .sidebarLogo {
@@ -329,9 +329,9 @@ body.dark-mode .sidebarToolbar {
 }
 
 body.dark-mode .sidebarDrawerPaper {
-    background-color: #16213e !important;
+    background-color: #333333 !important;
     color: #e0e0e0 !important;
-    border-right: 1px solid #2a2a4a !important;
+    border-right: 1px solid #444444 !important;
 }
 
 .sidebarNav {
@@ -352,7 +352,7 @@ body.dark-mode .sidebarDrawerPaper {
 }
 
 body.dark-mode .dashContainer {
-    background-color: #1a1a2e;
+    background-color: #2b2b2b;
 }
 
 .dashMain {
@@ -434,7 +434,7 @@ body.dark-mode .dashContainer {
 }
 
 body.dark-mode .passText {
-    background-color: #0f0f23;
+    background-color: #1e1e1e;
     color: #e0e0e0;
 }
 
@@ -496,7 +496,7 @@ body.dark-mode .passText {
 }
 
 body.dark-mode .aboutContainer {
-    background-color: #1a1a2e;
+    background-color: #2b2b2b;
 }
 
 .aboutContentContainer {
@@ -524,7 +524,7 @@ body.dark-mode .aboutContainer {
 }
 
 body.dark-mode .aboutPaper {
-    background-color: #16213e;
+    background-color: #3a3a3a;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
@@ -561,7 +561,7 @@ body.dark-mode .aboutPaper {
 }
 
 body.dark-mode .container {
-    background-color: #1a1a2e;
+    background-color: #2b2b2b;
 }
 
 .paper {
@@ -573,7 +573,7 @@ body.dark-mode .container {
 }
 
 body.dark-mode .paper {
-    background-color: #16213e;
+    background-color: #3a3a3a;
 }
 
 .backButton {
@@ -631,7 +631,7 @@ body.light-mode .footer {
 }
 
 body.dark-mode .footer {
-    background-color: #0f0f23;
+    background-color: #1e1e1e;
     color: #b7b2b2;
 }
 
@@ -642,22 +642,22 @@ body.dark-mode .footer {
 body.dark-mode .MuiCard-root,
 body.dark-mode .MuiPaper-root,
 body.dark-mode .MuiDialog-paper {
-    background-color: #16213e !important;
+    background-color: #3a3a3a !important;
     color: #e0e0e0 !important;
 }
 
 body.dark-mode .MuiInputBase-root,
 body.dark-mode .MuiOutlinedInput-root {
-    background-color: #0f0f23 !important;
+    background-color: #1e1e1e !important;
     color: #e0e0e0 !important;
 }
 
 body.dark-mode .MuiOutlinedInput-notchedOutline {
-    border-color: #2a2a4a !important;
+    border-color: #555555 !important;
 }
 
 body.dark-mode .MuiInputLabel-root {
-    color: #9090b0 !important;
+    color: #aaaaaa !important;
 }
 
 body.dark-mode .MuiTypography-root {
@@ -665,11 +665,11 @@ body.dark-mode .MuiTypography-root {
 }
 
 body.dark-mode .MuiSvgIcon-root {
-    color: #9090b0 !important;
+    color: #aaaaaa !important;
 }
 
 body.dark-mode .MuiChip-root {
-    background-color: #2a2a4a !important;
+    background-color: #444444 !important;
     color: #e0e0e0 !important;
 }
 
@@ -682,15 +682,15 @@ body.dark-mode .MuiSlider-root {
 }
 
 body.dark-mode .MuiDivider-root {
-    border-color: #2a2a4a !important;
+    border-color: #555555 !important;
 }
 
 body.dark-mode .MuiListItem-root:hover {
-    background-color: #2a2a4a !important;
+    background-color: #444444 !important;
 }
 
 body.dark-mode .MuiMenuItem-root:hover {
-    background-color: #2a2a4a !important;
+    background-color: #444444 !important;
 }
 
 body.dark-mode .MuiListItemText-primary {
@@ -698,7 +698,7 @@ body.dark-mode .MuiListItemText-primary {
 }
 
 body.dark-mode .MuiListItemText-secondary {
-    color: #9090b0 !important;
+    color: #aaaaaa !important;
 }
 
 body.dark-mode .MuiListItemIcon-root {
@@ -707,15 +707,15 @@ body.dark-mode .MuiListItemIcon-root {
 
 body.dark-mode .MuiTableCell-root {
     color: #e0e0e0 !important;
-    border-color: #2a2a4a !important;
+    border-color: #555555 !important;
 }
 
 body.dark-mode .MuiSelect-icon {
-    color: #9090b0 !important;
+    color: #aaaaaa !important;
 }
 
 body.dark-mode .MuiLinearProgress-root {
-    background-color: #2a2a4a !important;
+    background-color: #444444 !important;
 }
 
 /* ============================================================
