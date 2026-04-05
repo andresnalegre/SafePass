@@ -1,4 +1,3 @@
-// About.js
 import React, { useState, useEffect } from 'react';
 import { 
   Container, 
@@ -15,7 +14,6 @@ import {
 } from '@mui/material';
 import { Update, Storage as StorageIcon, Public as PublicIcon } from '@mui/icons-material';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import PersonIcon from '@mui/icons-material/Person';
 import CodeIcon from '@mui/icons-material/Code';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -75,15 +73,6 @@ const About = ({ notificationsRef }) => {
               </Typography>
 
               <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <PersonIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Personal Project" 
-                  />
-                </ListItem>
-
                 <ListItem>
                   <ListItemIcon>
                     <CodeIcon color="primary" />
