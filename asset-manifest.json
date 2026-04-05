@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/SafePass/static/css/main.c270794e.css",
-    "main.js": "/SafePass/static/js/main.1aecbaa6.js",
+    "main.js": "/SafePass/static/js/main.aa1b0856.js",
     "static/media/Helvetica-BoldOblique.ttf": "/SafePass/static/media/Helvetica-BoldOblique.515cc70a63c280858dc7.ttf",
     "static/media/SafePass.svg": "/SafePass/static/media/SafePass.9abeeed997943bb6ae5766c2f1d9e6ad.svg",
     "static/media/logo.svg": "/SafePass/static/media/logo.c4378bfe226f16e33385a041b0daddf2.svg",
     "index.html": "/SafePass/index.html",
     "main.c270794e.css.map": "/SafePass/static/css/main.c270794e.css.map",
-    "main.1aecbaa6.js.map": "/SafePass/static/js/main.1aecbaa6.js.map"
+    "main.aa1b0856.js.map": "/SafePass/static/js/main.aa1b0856.js.map"
   },
   "entrypoints": [
     "static/css/main.c270794e.css",
-    "static/js/main.1aecbaa6.js"
+    "static/js/main.aa1b0856.js"
   ]
 }
