@@ -453,6 +453,7 @@ body.dark-mode .passText {
     justify-content: center;
     align-items: flex-start;
     padding: 16px 20px 100px 20px;
+    margin-left: 240px;
 }
 
 .aboutPaper {
@@ -597,6 +598,7 @@ body.dark-mode .footer {
     }
 
     .aboutContentContainer {
+        margin-left: 0;
         padding: 16px 16px 100px 16px;
     }
 
