@@ -297,7 +297,7 @@ body {
 .sidebarDrawerPaper {
     box-sizing: border-box !important;
     width: 240px !important;
-    height: 100vh !important;
+    height: calc(100vh - 53px) !important;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -609,7 +609,7 @@ body.dark-mode .footer {
 
     .sidebarDrawerPaper {
         width: 240px !important;
-        height: 100vh !important;
+        height: calc(100vh - 53px) !important;
     }
 
     .dashMain {
