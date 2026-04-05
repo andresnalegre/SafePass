@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
   Box,
   Paper,
   Typography,
@@ -61,83 +60,81 @@ const Login = ({ notificationsRef }) => {
   const handleMouseDownPassword = (event) => event.preventDefault();
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box className="safeContainer">
-        <Paper className="safePaper" elevation={3}>
-          <Box className="safeHeader">
-            <Box
-              component="img"
-              src={SafePassImage}
-              alt="SafePass"
-              className="safeLogo"
-            />
-            <Typography component="h1" variant="h5" className="safeTitle">
-              Welcome to SafePass
-            </Typography>
-            <Typography variant="body2" color="text.secondary" align="center">
-              All passwords under your control
-            </Typography>
+    <Box className="safeContainer">
+      <Paper className="safePaper" elevation={3}>
+        <Box className="safeHeader">
+          <Box
+            component="img"
+            src={SafePassImage}
+            alt="SafePass"
+            className="safeLogo"
+          />
+          <Typography component="h1" variant="h5" className="safeTitle">
+            Welcome to SafePass
+          </Typography>
+          <Typography variant="body2" color="text.secondary" align="center">
+            All passwords under your control
+          </Typography>
+        </Box>
+
+        <form onSubmit={handleSubmit} noValidate style={{ width: '100%' }}>
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            id="username"
+            name="username"
+            label="Username"
+            autoComplete="username"
+            autoFocus
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            InputProps={{ className: 'safeTextField' }}
+          />
+
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            id="password"
+            name="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              className: 'safeTextField',
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <Button type="submit" fullWidth variant="contained" className="safeSubmitButton">
+            Sign In
+          </Button>
+
+          <Box className="safeLinkContainer">
+            <Link component={RouterLink} to="/register" variant="body2" className="safeLink">
+              Sign Up
+            </Link>
+            <Link component={RouterLink} to="/forgot-password" variant="body2" className="safeLink">
+              Forgot Password?
+            </Link>
           </Box>
-
-          <form onSubmit={handleSubmit} noValidate>
-            <TextField
-              required
-              fullWidth
-              margin="normal"
-              id="username"
-              name="username"
-              label="Username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              InputProps={{ className: 'safeTextField' }}
-            />
-
-            <TextField
-              required
-              fullWidth
-              margin="normal"
-              id="password"
-              name="password"
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              InputProps={{
-                className: 'safeTextField',
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            <Button type="submit" fullWidth variant="contained" className="safeSubmitButton">
-              Sign In
-            </Button>
-
-            <Box className="safeLinkContainer">
-              <Link component={RouterLink} to="/register" variant="body2" className="safeLink">
-                Sign Up
-              </Link>
-              <Link component={RouterLink} to="/forgot-password" variant="body2" className="safeLink">
-                Forgot Password?
-              </Link>
-            </Box>
-          </form>
-        </Paper>
-      </Box>
-    </Container>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 
