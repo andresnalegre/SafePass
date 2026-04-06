@@ -304,7 +304,7 @@ body.dark-mode .resetContainer {
 }
 
 body.dark-mode .sidebarToolbar {
-    background-color: #424242 !important;
+    background-color: #e8e8e8 !important;
 }
 
 .sidebarLogo {
@@ -525,7 +525,7 @@ body.dark-mode .aboutContainer {
 
 body.dark-mode .aboutPaper {
     background-color: #424242;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: none;
 }
 
 .aboutTitleBox {
@@ -644,6 +644,7 @@ body.dark-mode .MuiPaper-root,
 body.dark-mode .MuiDialog-paper {
     background-color: #424242 !important;
     color: #e0e0e0 !important;
+    box-shadow: none !important;
 }
 
 body.dark-mode .MuiInputBase-root,
