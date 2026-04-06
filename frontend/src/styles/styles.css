@@ -750,7 +750,6 @@ body.dark-mode .MuiCheckbox-root svg path {
     fill: #1976d2 !important;
 }
 
-
 body.dark-mode .MuiCheckbox-root.Mui-checked {
     color: #4a90d9 !important;
 }
@@ -763,9 +762,12 @@ body.dark-mode .MuiCheckbox-root {
     color: #1976d2 !important;
 }
 
-
 body.dark-mode .MuiSvgIcon-root[data-testid="CheckBoxIcon"] {
     color: #4a90d9 !important;
+}
+
+body.dark-mode .MuiCheckbox-root.Mui-checked svg path {
+    fill: #ffffff !important;
 }
 
 body.dark-mode .MuiSlider-root {
