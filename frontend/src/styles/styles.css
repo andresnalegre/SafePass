@@ -631,7 +631,7 @@ body.light-mode .footer {
 }
 
 body.dark-mode .footer {
-    background-color: #424242;
+    background-color: #303030 !important;
     color: #b7b2b2;
 }
 
@@ -639,8 +639,13 @@ body.dark-mode .footer {
    DARK MODE - MUI OVERRIDES
    ============================================================ */
 
+body.dark-mode .MuiDrawer-paper {
+    background-color: #616161 !important;
+    color: #e0e0e0 !important;
+}
+
 body.dark-mode .MuiCard-root,
-body.dark-mode .MuiPaper-root,
+body.dark-mode .MuiPaper-root:not(.MuiDrawer-paper),
 body.dark-mode .MuiDialog-paper {
     background-color: #424242 !important;
     color: #e0e0e0 !important;
