@@ -888,11 +888,12 @@ body.dark-mode .MuiLinearProgress-root {
 
     .dashMain {
         padding: 12px;
+        padding-bottom: 80px;
     }
 
     .dashHeader {
         margin-bottom: 16px;
-        justify-content: center;
+        justify-content: flex-end;
     }
 
     .passHeader {
