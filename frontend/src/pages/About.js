@@ -16,12 +16,20 @@ import CodeIcon from '@mui/icons-material/Code';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import { useTheme } from '../styles/Theme';
 import '../styles/styles.css';
 
 const About = ({ notificationsRef }) => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { darkMode } = useTheme();
+
+  const primaryColor = darkMode ? '#64b5f6' : '#222222';
+  const secondaryColor = darkMode ? '#f0f0f0' : '#777777';
+  const subtitleColor = darkMode ? '#f0f0f0' : '#555555';
+  const linkColor = darkMode ? '#90caf9' : '#1976d2';
+  const iconColor = darkMode ? '#64b5f6' : undefined;
 
   useEffect(() => {
     const storedUserName = localStorage.getItem('username');
@@ -55,60 +63,101 @@ const About = ({ notificationsRef }) => {
             </Typography>
           </Box>
 
-          <Typography variant="body1" className="aboutSubtitle">
+          <Typography
+            variant="body1"
+            className="aboutSubtitle"
+            sx={{ color: subtitleColor }}
+          >
             SafePass is a platform that helps you create stronger passwords and manage them easily.
           </Typography>
 
           <List className="aboutList">
             <ListItem className="aboutListItem">
               <ListItemIcon className="aboutListIcon">
-                <CodeIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary={<Typography className="aboutItemPrimary">Stack</Typography>}
-                secondary={<Typography className="aboutItemSecondary">React + Material UI</Typography>}
-              />
-            </ListItem>
-
-            <ListItem className="aboutListItem">
-              <ListItemIcon className="aboutListIcon">
-                <StorageIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary={<Typography className="aboutItemPrimary">Storage</Typography>}
-                secondary={<Typography className="aboutItemSecondary">localStorage</Typography>}
-              />
-            </ListItem>
-
-            <ListItem className="aboutListItem">
-              <ListItemIcon className="aboutListIcon">
-                <PublicIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary={<Typography className="aboutItemPrimary">Deploy</Typography>}
-                secondary={<Typography className="aboutItemSecondary">Hosted by GitHub Pages</Typography>}
-              />
-            </ListItem>
-
-            <ListItem className="aboutListItem">
-              <ListItemIcon className="aboutListIcon">
-                <Update color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary={<Typography className="aboutItemPrimary">Version</Typography>}
-                secondary={<Typography className="aboutItemSecondary">1.0.0</Typography>}
-              />
-            </ListItem>
-
-            <ListItem className="aboutListItem">
-              <ListItemIcon className="aboutListIcon">
-                <GitHubIcon color="primary" />
+                <CodeIcon sx={{ color: iconColor }} color={darkMode ? undefined : 'primary'} />
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <Typography className="aboutItemPrimary">
+                  <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: primaryColor }}>
+                    Stack
+                  </Typography>
+                }
+                secondary={
+                  <Typography sx={{ fontSize: '0.85rem', color: secondaryColor, mt: '2px' }}>
+                    React + Material UI
+                  </Typography>
+                }
+              />
+            </ListItem>
+
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
+                <StorageIcon sx={{ color: iconColor }} color={darkMode ? undefined : 'primary'} />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: primaryColor }}>
+                    Storage
+                  </Typography>
+                }
+                secondary={
+                  <Typography sx={{ fontSize: '0.85rem', color: secondaryColor, mt: '2px' }}>
+                    localStorage
+                  </Typography>
+                }
+              />
+            </ListItem>
+
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
+                <PublicIcon sx={{ color: iconColor }} color={darkMode ? undefined : 'primary'} />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: primaryColor }}>
+                    Deploy
+                  </Typography>
+                }
+                secondary={
+                  <Typography sx={{ fontSize: '0.85rem', color: secondaryColor, mt: '2px' }}>
+                    Hosted by GitHub Pages
+                  </Typography>
+                }
+              />
+            </ListItem>
+
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
+                <Update sx={{ color: iconColor }} color={darkMode ? undefined : 'primary'} />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: primaryColor }}>
+                    Version
+                  </Typography>
+                }
+                secondary={
+                  <Typography sx={{ fontSize: '0.85rem', color: secondaryColor, mt: '2px' }}>
+                    1.0.0
+                  </Typography>
+                }
+              />
+            </ListItem>
+
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
+                <GitHubIcon sx={{ color: iconColor }} color={darkMode ? undefined : 'primary'} />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: primaryColor }}>
                     Developed by{' '}
-                    <Link href="https://andresnicolas.com/" target="_blank" rel="noopener" className="aboutLink">
+                    <Link
+                      href="https://andresnicolas.com/"
+                      target="_blank"
+                      rel="noopener"
+                      sx={{ color: linkColor, textDecoration: 'none', fontWeight: 600, '&:hover': { textDecoration: 'underline' } }}
+                    >
                       Andres Nicolas
                     </Link>
                   </Typography>
