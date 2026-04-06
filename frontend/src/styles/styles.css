@@ -559,7 +559,7 @@ body.dark-mode .aboutTitle {
 }
 
 body.dark-mode .aboutSubtitle {
-    color: #cccccc !important;
+    color: #90caf9 !important;
 }
 
 .aboutList {
@@ -595,7 +595,7 @@ body.dark-mode .aboutListItem:last-child {
 }
 
 body.dark-mode .aboutItemPrimary {
-    color: #f0f0f0 !important;
+    color: #64b5f6 !important;
 }
 
 .aboutItemSecondary {
@@ -605,7 +605,7 @@ body.dark-mode .aboutItemPrimary {
 }
 
 body.dark-mode .aboutItemSecondary {
-    color: #cccccc !important;
+    color: #90caf9 !important;
 }
 
 .aboutLink {
@@ -619,7 +619,7 @@ body.dark-mode .aboutItemSecondary {
 }
 
 body.dark-mode .aboutLink {
-    color: #64b5f6 !important;
+    color: #90caf9 !important;
 }
 
 .aboutInfoIcon {
@@ -814,7 +814,7 @@ body.dark-mode .MuiListItemText-secondary {
 }
 
 body.dark-mode .MuiListItemIcon-root {
-    color: #4a90d9 !important;
+    color: #64b5f6 !important;
 }
 
 body.dark-mode .MuiTableCell-root {
