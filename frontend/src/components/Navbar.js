@@ -50,9 +50,9 @@ const Navbar = ({ onDrawerToggle }) => {
     localStorage.removeItem('user_id');
     localStorage.removeItem('username');
     sessionStorage.clear();
-    navigate('/', { state: { logoutMessage: 'See you next time!' } });
     handleMenuClose();
-  }, [navigate, handleMenuClose]);
+    window.location.reload();
+  }, [handleMenuClose]);
 
   return (
     <AppBar position="fixed" className={isMobile ? 'navAppBarMobile' : 'navAppBar'}>
