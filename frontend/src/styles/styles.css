@@ -674,6 +674,16 @@ body.dark-mode .MuiSvgIcon-root {
     color: #aaaaaa !important;
 }
 
+body.dark-mode .MuiButton-containedSuccess .MuiSvgIcon-root,
+body.dark-mode .MuiButton-containedSuccess {
+    color: #ffffff !important;
+}
+
+body.dark-mode .MuiButton-containedPrimary .MuiSvgIcon-root,
+body.dark-mode .MuiButton-containedPrimary {
+    color: #ffffff !important;
+}
+
 body.dark-mode .MuiChip-root {
     background-color: #555555 !important;
     color: #e0e0e0 !important;
