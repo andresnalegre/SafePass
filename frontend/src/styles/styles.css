@@ -435,7 +435,7 @@ body.dark-mode .dashContainer {
 
 body.dark-mode .passText {
     background-color: #333333;
-    color: #e0e0e0;
+    color: #f0f0f0;
 }
 
 /* PasswordGenerator */
@@ -559,7 +559,7 @@ body.dark-mode .aboutTitle {
 }
 
 body.dark-mode .aboutSubtitle {
-    color: #bbbbbb !important;
+    color: #cccccc !important;
 }
 
 .aboutList {
@@ -595,7 +595,7 @@ body.dark-mode .aboutListItem:last-child {
 }
 
 body.dark-mode .aboutItemPrimary {
-    color: #e0e0e0 !important;
+    color: #f0f0f0 !important;
 }
 
 .aboutItemSecondary {
@@ -605,7 +605,7 @@ body.dark-mode .aboutItemPrimary {
 }
 
 body.dark-mode .aboutItemSecondary {
-    color: #aaaaaa !important;
+    color: #cccccc !important;
 }
 
 .aboutLink {
@@ -726,14 +726,19 @@ body.dark-mode .MuiCard-root,
 body.dark-mode .MuiPaper-root:not(.MuiDrawer-paper),
 body.dark-mode .MuiDialog-paper {
     background-color: #424242 !important;
-    color: #e0e0e0 !important;
+    color: #f0f0f0 !important;
     box-shadow: none !important;
 }
 
 body.dark-mode .MuiInputBase-root,
 body.dark-mode .MuiOutlinedInput-root {
     background-color: #333333 !important;
-    color: #e0e0e0 !important;
+    color: #f0f0f0 !important;
+}
+
+body.dark-mode .MuiInputBase-input::placeholder {
+    color: #aaaaaa !important;
+    opacity: 1 !important;
 }
 
 body.dark-mode .MuiOutlinedInput-notchedOutline {
@@ -741,11 +746,19 @@ body.dark-mode .MuiOutlinedInput-notchedOutline {
 }
 
 body.dark-mode .MuiInputLabel-root {
-    color: #aaaaaa !important;
+    color: #cccccc !important;
 }
 
 body.dark-mode .MuiTypography-root {
-    color: #e0e0e0 !important;
+    color: #f0f0f0 !important;
+}
+
+body.dark-mode .MuiFormControlLabel-label {
+    color: #f0f0f0 !important;
+}
+
+body.dark-mode .MuiSlider-markLabel {
+    color: #cccccc !important;
 }
 
 body.dark-mode .MuiSvgIcon-root {
@@ -764,7 +777,7 @@ body.dark-mode .MuiButton-containedPrimary .MuiSvgIcon-root {
 
 body.dark-mode .MuiChip-root {
     background-color: #555555 !important;
-    color: #e0e0e0 !important;
+    color: #f0f0f0 !important;
 }
 
 body.dark-mode .MuiChip-colorSuccess {
@@ -793,11 +806,11 @@ body.dark-mode .MuiMenuItem-root:hover {
 }
 
 body.dark-mode .MuiListItemText-primary {
-    color: #e0e0e0 !important;
+    color: #f0f0f0 !important;
 }
 
 body.dark-mode .MuiListItemText-secondary {
-    color: #aaaaaa !important;
+    color: #cccccc !important;
 }
 
 body.dark-mode .MuiListItemIcon-root {
@@ -805,7 +818,7 @@ body.dark-mode .MuiListItemIcon-root {
 }
 
 body.dark-mode .MuiTableCell-root {
-    color: #e0e0e0 !important;
+    color: #f0f0f0 !important;
     border-color: #555555 !important;
 }
 
