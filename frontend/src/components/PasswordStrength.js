@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, LinearProgress, Chip } from '@mui/material';
+import { useTheme } from '../styles/Theme';
 import '../styles/styles.css';
 
 export const getPasswordStrength = (password) => {
@@ -67,6 +68,11 @@ export const getPasswordStrength = (password) => {
 
 const PasswordStrength = ({ password }) => {
   const { score, message, color, requirements } = getPasswordStrength(password);
+  const { darkMode } = useTheme();
+
+  const chipDefaultStyle = darkMode
+    ? { backgroundColor: '#555555', color: '#f0f0f0' }
+    : {};
 
   return (
     <Box className="passwordStrengthContainer">
@@ -84,11 +90,31 @@ const PasswordStrength = ({ password }) => {
         }}
       />
       <Box className="chipContainer">
-        <Chip label="8+ characters" color={requirements.minLength ? 'success' : 'default'} />
-        <Chip label="Uppercase" color={requirements.hasUppercase ? 'success' : 'default'} />
-        <Chip label="Lowercase" color={requirements.hasLowercase ? 'success' : 'default'} />
-        <Chip label="Number" color={requirements.hasNumber ? 'success' : 'default'} />
-        <Chip label="Special char" color={requirements.hasSpecial ? 'success' : 'default'} />
+        <Chip
+          label="8+ characters"
+          color={requirements.minLength ? 'success' : 'default'}
+          style={!requirements.minLength ? chipDefaultStyle : {}}
+        />
+        <Chip
+          label="Uppercase"
+          color={requirements.hasUppercase ? 'success' : 'default'}
+          style={!requirements.hasUppercase ? chipDefaultStyle : {}}
+        />
+        <Chip
+          label="Lowercase"
+          color={requirements.hasLowercase ? 'success' : 'default'}
+          style={!requirements.hasLowercase ? chipDefaultStyle : {}}
+        />
+        <Chip
+          label="Number"
+          color={requirements.hasNumber ? 'success' : 'default'}
+          style={!requirements.hasNumber ? chipDefaultStyle : {}}
+        />
+        <Chip
+          label="Special char"
+          color={requirements.hasSpecial ? 'success' : 'default'}
+          style={!requirements.hasSpecial ? chipDefaultStyle : {}}
+        />
       </Box>
     </Box>
   );

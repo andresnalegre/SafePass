@@ -553,13 +553,8 @@ body.dark-mode .aboutTitle {
     text-align: center;
     width: 100%;
     margin-bottom: 24px !important;
-    color: #555555 !important;
     font-size: 0.95rem !important;
     line-height: 1.6 !important;
-}
-
-body.dark-mode .aboutSubtitle {
-    color: #90caf9 !important;
 }
 
 .aboutList {
@@ -586,40 +581,6 @@ body.dark-mode .aboutListItem:last-child {
 
 .aboutListIcon {
     min-width: 40px !important;
-}
-
-.aboutItemPrimary {
-    font-size: 0.95rem !important;
-    font-weight: 600 !important;
-    color: #222222 !important;
-}
-
-body.dark-mode .aboutItemPrimary {
-    color: #64b5f6 !important;
-}
-
-.aboutItemSecondary {
-    font-size: 0.85rem !important;
-    color: #777777 !important;
-    margin-top: 2px !important;
-}
-
-body.dark-mode .aboutItemSecondary {
-    color: #90caf9 !important;
-}
-
-.aboutLink {
-    color: #1976d2 !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-}
-
-.aboutLink:hover {
-    text-decoration: underline !important;
-}
-
-body.dark-mode .aboutLink {
-    color: #90caf9 !important;
 }
 
 .aboutInfoIcon {
@@ -750,7 +711,7 @@ body.dark-mode .MuiInputLabel-root {
 }
 
 body.dark-mode .MuiTypography-root {
-    color: #f0f0f0 !important;
+    color: inherit !important;
 }
 
 body.dark-mode .MuiFormControlLabel-label {
@@ -762,7 +723,7 @@ body.dark-mode .MuiSlider-markLabel {
 }
 
 body.dark-mode .MuiSvgIcon-root {
-    color: #aaaaaa !important;
+    color: #aaaaaa;
 }
 
 body.dark-mode .MuiButton-containedSuccess,
@@ -785,7 +746,25 @@ body.dark-mode .MuiChip-colorSuccess {
     color: #ffffff !important;
 }
 
+body.dark-mode .MuiCheckbox-root svg path {
+    fill: #1976d2 !important;
+}
+
+
+body.dark-mode .MuiCheckbox-root.Mui-checked {
+    color: #4a90d9 !important;
+}
+
+body.dark-mode .MuiCheckbox-root .MuiSvgIcon-root {
+    color: #1976d2 !important;
+}
+
 body.dark-mode .MuiCheckbox-root {
+    color: #1976d2 !important;
+}
+
+
+body.dark-mode .MuiSvgIcon-root[data-testid="CheckBoxIcon"] {
     color: #4a90d9 !important;
 }
 

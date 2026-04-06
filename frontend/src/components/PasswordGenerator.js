@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { Refresh as GenerateIcon, ContentCopy as CopyIcon } from '@mui/icons-material';
 import PasswordStrength from '../components/PasswordStrength';
+import { useTheme } from '../styles/Theme';
 import '../styles/styles.css';
 
 const PasswordGenerator = ({ onGenerate, notificationsRef }) => {
@@ -24,6 +25,9 @@ const PasswordGenerator = ({ onGenerate, notificationsRef }) => {
     useSpecial: true,
   });
   const [generatedPassword, setGeneratedPassword] = useState('');
+  const { darkMode } = useTheme();
+
+  const textColor = darkMode ? '#f0f0f0' : 'inherit';
 
   const generatePassword = () => {
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -69,9 +73,11 @@ const PasswordGenerator = ({ onGenerate, notificationsRef }) => {
   return (
     <Card className="passwordGenCard">
       <CardContent className="passwordGenCardContent">
-        <Typography variant="h6" gutterBottom>Password Generator</Typography>
+        <Typography variant="h6" gutterBottom style={{ color: textColor }}>
+          Password Generator
+        </Typography>
         <Box className="passwordGenSliderBox">
-          <Typography>Length: {options.length}</Typography>
+          <Typography style={{ color: textColor }}>Length: {options.length}</Typography>
           <Slider
             value={options.length}
             min={8}
@@ -91,37 +97,28 @@ const PasswordGenerator = ({ onGenerate, notificationsRef }) => {
             control={
               <Checkbox
                 checked={options.useUppercase}
-                onChange={(e) => setOptions({
-                  ...options,
-                  useUppercase: e.target.checked,
-                })}
+                onChange={(e) => setOptions({ ...options, useUppercase: e.target.checked })}
               />
             }
-            label="Uppercase letters"
+            label={<span style={{ color: textColor }}>Uppercase letters</span>}
           />
           <FormControlLabel
             control={
               <Checkbox
                 checked={options.useNumbers}
-                onChange={(e) => setOptions({
-                  ...options,
-                  useNumbers: e.target.checked,
-                })}
+                onChange={(e) => setOptions({ ...options, useNumbers: e.target.checked })}
               />
             }
-            label="Numbers"
+            label={<span style={{ color: textColor }}>Numbers</span>}
           />
           <FormControlLabel
             control={
               <Checkbox
                 checked={options.useSpecial}
-                onChange={(e) => setOptions({
-                  ...options,
-                  useSpecial: e.target.checked,
-                })}
+                onChange={(e) => setOptions({ ...options, useSpecial: e.target.checked })}
               />
             }
-            label="Special characters"
+            label={<span style={{ color: textColor }}>Special characters</span>}
           />
         </Box>
 
@@ -134,6 +131,7 @@ const PasswordGenerator = ({ onGenerate, notificationsRef }) => {
             size="small"
             InputProps={{
               readOnly: true,
+              style: { color: textColor },
               endAdornment: (
                 <Box className="passwordGenEndAdornmentBox">
                   <Tooltip title="Copy password">

@@ -31,6 +31,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import PasswordGenerator from '../components/PasswordGenerator';
 import PasswordStrength from '../components/PasswordStrength';
+import { useTheme } from '../styles/Theme';
 import '../styles/styles.css';
 
 const PASSWORDS_KEY = 'safepass_passwords';
@@ -48,6 +49,10 @@ const Dashboard = ({ notificationsRef }) => {
   const [userName, setUserName] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const { darkMode } = useTheme();
+
+  const textColor = darkMode ? '#f0f0f0' : 'inherit';
+  const secondaryTextColor = darkMode ? '#cccccc' : '#666666';
 
   const messages = {
     copyPasswordSuccess: 'Password copied to clipboard.',
@@ -187,7 +192,7 @@ const Dashboard = ({ notificationsRef }) => {
             <Card>
               <CardContent>
                 <Box className="passHeader">
-                  <Typography variant="h5">
+                  <Typography variant="h5" style={{ color: textColor }}>
                     Passwords
                     <Chip label={filteredPasswords.length} size="small" className="passCount" />
                   </Typography>
@@ -198,13 +203,13 @@ const Dashboard = ({ notificationsRef }) => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="searchField"
                     InputProps={{
-                      startAdornment: <SearchIcon color="action" className="searchIcon" />,
+                      startAdornment: <SearchIcon style={{ color: secondaryTextColor, marginRight: 8 }} />,
                     }}
                   />
                 </Box>
 
                 {filteredPasswords.length === 0 ? (
-                  <Typography variant="h6" color="textSecondary" align="center">
+                  <Typography variant="h6" style={{ color: secondaryTextColor }} align="center">
                     No passwords found
                   </Typography>
                 ) : (
@@ -213,10 +218,10 @@ const Dashboard = ({ notificationsRef }) => {
                       <CardContent>
                         <Box className="passDetails">
                           <Box>
-                            <Typography variant="h6" className="passwordTitle">
+                            <Typography variant="h6" style={{ color: textColor }}>
                               {password.title}
                             </Typography>
-                            <Typography className="passwordUsername">
+                            <Typography style={{ color: secondaryTextColor }}>
                               {password.username}
                             </Typography>
                           </Box>
@@ -266,7 +271,7 @@ const Dashboard = ({ notificationsRef }) => {
         </Grid>
 
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-          <DialogTitle>{editingPassword ? 'Edit' : 'Add New Password'}</DialogTitle>
+          <DialogTitle style={{ color: textColor }}>{editingPassword ? 'Edit' : 'Add New Password'}</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
