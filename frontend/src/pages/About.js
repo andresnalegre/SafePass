@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Container, 
   Typography, 
   Paper, 
   Box, 
@@ -9,7 +8,6 @@ import {
   ListItemIcon, 
   ListItemText, 
   Toolbar,
-  Grid,
   Link
 } from '@mui/material';
 import { Update, Storage as StorageIcon, Public as PublicIcon } from '@mui/icons-material';
@@ -47,89 +45,79 @@ const About = ({ notificationsRef }) => {
     <Box className="aboutContainer">
       <Navbar onDrawerToggle={handleDrawerToggle} />
       <Sidebar mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle} />
-      
-      <Container component="main" maxWidth="lg" className="aboutContentContainer">
+
+      <Box className="aboutContentContainer">
         <Toolbar />
-        
-        <Grid 
-          container 
-          justifyContent="center" 
-          alignItems="center" 
-          className="aboutContentContainer"
-        >
-          <Grid item xs={12} sm={10} md={8} lg={8}>
-            <Paper elevation={4} className="aboutPaper">
-              <Box className="aboutTitleBox">
-                <Typography variant="h4" component="h1">
-                  About SafePass
-                </Typography>
-              </Box>
+        <Paper elevation={4} className="aboutPaper">
+          <Box className="aboutTitleBox">
+            <Typography variant="h4" component="h1">
+              About SafePass
+            </Typography>
+          </Box>
 
-              <Typography variant="body1" paragraph className="aboutSubtitle">
-                SafePass is a platform that helps you create stronger passwords and manage them easily.
-              </Typography>
+          <Typography variant="body1" paragraph className="aboutSubtitle">
+            SafePass is a platform that helps you create stronger passwords and manage them easily.
+          </Typography>
 
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <CodeIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Stack" 
-                    secondary="React + Material UI"
-                  />
-                </ListItem>
+          <List>
+            <ListItem>
+              <ListItemIcon>
+                <CodeIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Stack"
+                secondary="React + Material UI"
+              />
+            </ListItem>
 
-                <ListItem>
-                  <ListItemIcon>
-                    <StorageIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Storage" 
-                    secondary="localStorage"
-                  />
-                </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <StorageIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Storage"
+                secondary="localStorage"
+              />
+            </ListItem>
 
-                <ListItem>
-                  <ListItemIcon>
-                    <PublicIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Deploy" 
-                    secondary="Hosted by GitHub Pages"
-                  />
-                </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <PublicIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Deploy"
+                secondary="Hosted by GitHub Pages"
+              />
+            </ListItem>
 
-                <ListItem>
-                  <ListItemIcon>
-                    <Update color="primary" />
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Version" 
-                    secondary="1.0.0"
-                  />
-                </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Update color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Version"
+                secondary="1.0.0"
+              />
+            </ListItem>
 
-                <ListItem>
-                  <ListItemIcon>
-                    <GitHubIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={
-                      <>
-                        Developed by{' '}
-                        <Link href="https://github.com/andresnalegre" target="_blank" rel="noopener">
-                          Andres Nicolas
-                        </Link>
-                      </>
-                    }
-                  />
-                </ListItem>
-              </List>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
+            <ListItem>
+              <ListItemIcon>
+                <GitHubIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <>
+                    Developed by{' '}
+                    <Link href="https://github.com/andresnalegre" target="_blank" rel="noopener">
+                      Andres Nicolas
+                    </Link>
+                  </>
+                }
+              />
+            </ListItem>
+          </List>
+        </Paper>
+      </Box>
     </Box>
   );
 };
