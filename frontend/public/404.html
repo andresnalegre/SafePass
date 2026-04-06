@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SafePass</title>
+    <script>
+      var path = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+      var redirectUrl = '/SafePass/?redirect=' + encodeURIComponent(path + search + hash);
+      window.location.replace(redirectUrl);
+    </script>
+  </head>
+  <body></body>
+</html>
