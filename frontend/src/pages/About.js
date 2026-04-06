@@ -48,70 +48,70 @@ const About = ({ notificationsRef }) => {
 
       <Box className="aboutContentContainer">
         <Toolbar />
-        <Paper elevation={4} className="aboutPaper">
+        <Paper elevation={3} className="aboutPaper">
           <Box className="aboutTitleBox">
-            <Typography variant="h4" component="h1">
+            <Typography className="aboutTitle">
               About SafePass
             </Typography>
           </Box>
 
-          <Typography variant="body1" paragraph className="aboutSubtitle">
+          <Typography variant="body1" className="aboutSubtitle">
             SafePass is a platform that helps you create stronger passwords and manage them easily.
           </Typography>
 
-          <List>
-            <ListItem>
-              <ListItemIcon>
+          <List className="aboutList">
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
                 <CodeIcon color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary="Stack"
-                secondary="React + Material UI"
+                primary={<Typography className="aboutItemPrimary">Stack</Typography>}
+                secondary={<Typography className="aboutItemSecondary">React + Material UI</Typography>}
               />
             </ListItem>
 
-            <ListItem>
-              <ListItemIcon>
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
                 <StorageIcon color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary="Storage"
-                secondary="localStorage"
+                primary={<Typography className="aboutItemPrimary">Storage</Typography>}
+                secondary={<Typography className="aboutItemSecondary">localStorage</Typography>}
               />
             </ListItem>
 
-            <ListItem>
-              <ListItemIcon>
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
                 <PublicIcon color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary="Deploy"
-                secondary="Hosted by GitHub Pages"
+                primary={<Typography className="aboutItemPrimary">Deploy</Typography>}
+                secondary={<Typography className="aboutItemSecondary">Hosted by GitHub Pages</Typography>}
               />
             </ListItem>
 
-            <ListItem>
-              <ListItemIcon>
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
                 <Update color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary="Version"
-                secondary="1.0.0"
+                primary={<Typography className="aboutItemPrimary">Version</Typography>}
+                secondary={<Typography className="aboutItemSecondary">1.0.0</Typography>}
               />
             </ListItem>
 
-            <ListItem>
-              <ListItemIcon>
+            <ListItem className="aboutListItem">
+              <ListItemIcon className="aboutListIcon">
                 <GitHubIcon color="primary" />
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <>
+                  <Typography className="aboutItemPrimary">
                     Developed by{' '}
-                    <Link href="https://github.com/andresnalegre" target="_blank" rel="noopener">
+                    <Link href="https://andresnicolas.com/" target="_blank" rel="noopener" className="aboutLink">
                       Andres Nicolas
                     </Link>
-                  </>
+                  </Typography>
                 }
               />
             </ListItem>

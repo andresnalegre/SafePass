@@ -511,13 +511,12 @@ body.dark-mode .aboutContainer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 32px;
-    padding-bottom: 48px;
+    padding: 40px 48px;
     background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
     height: auto;
     margin-top: 70px;
     margin-bottom: 80px;
@@ -528,20 +527,99 @@ body.dark-mode .aboutPaper {
     box-shadow: none;
 }
 
+.aboutTitle {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #1976d2 !important;
+    text-align: center;
+    letter-spacing: -0.5px !important;
+}
+
+body.dark-mode .aboutTitle {
+    color: #64b5f6 !important;
+}
+
 .aboutTitleBox {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-bottom: 40px;
-    margin-top: 24px;
+    margin-bottom: 16px;
+    margin-top: 8px;
     text-align: center;
 }
 
 .aboutSubtitle {
     text-align: center;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 24px !important;
+    color: #555555 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+}
+
+body.dark-mode .aboutSubtitle {
+    color: #bbbbbb !important;
+}
+
+.aboutList {
+    width: 100%;
+    padding: 0 !important;
+}
+
+.aboutListItem {
+    padding: 12px 8px !important;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.aboutListItem:last-child {
+    border-bottom: none;
+}
+
+body.dark-mode .aboutListItem {
+    border-bottom: 1px solid #555555;
+}
+
+body.dark-mode .aboutListItem:last-child {
+    border-bottom: none;
+}
+
+.aboutListIcon {
+    min-width: 40px !important;
+}
+
+.aboutItemPrimary {
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    color: #222222 !important;
+}
+
+body.dark-mode .aboutItemPrimary {
+    color: #e0e0e0 !important;
+}
+
+.aboutItemSecondary {
+    font-size: 0.85rem !important;
+    color: #777777 !important;
+    margin-top: 2px !important;
+}
+
+body.dark-mode .aboutItemSecondary {
+    color: #aaaaaa !important;
+}
+
+.aboutLink {
+    color: #1976d2 !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+}
+
+.aboutLink:hover {
+    text-decoration: underline !important;
+}
+
+body.dark-mode .aboutLink {
+    color: #64b5f6 !important;
 }
 
 .aboutInfoIcon {
@@ -776,6 +854,7 @@ body.dark-mode .MuiLinearProgress-root {
     .aboutPaper {
         margin-top: 80px;
         margin-bottom: 40px;
+        padding: 32px 24px;
     }
 
     .registerTitle {
@@ -833,10 +912,13 @@ body.dark-mode .MuiLinearProgress-root {
 
     .aboutPaper {
         padding: 24px 16px;
-        padding-bottom: 32px;
         margin-top: 80px;
         margin-bottom: 40px;
-        border-radius: 16px;
+        border-radius: 12px;
+    }
+
+    .aboutTitle {
+        font-size: 1.6rem !important;
     }
 
     .aboutTitleBox {
