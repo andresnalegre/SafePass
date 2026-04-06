@@ -10,7 +10,7 @@ body {
 }
 
 body.dark-mode {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 /* Login */
@@ -25,7 +25,7 @@ body.dark-mode {
 }
 
 body.dark-mode .safeContainer {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 .safePaper {
@@ -107,7 +107,7 @@ body.dark-mode .safeContainer {
 }
 
 body.dark-mode .registerContainer {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 .registerBackButton {
@@ -187,7 +187,7 @@ body.dark-mode .registerContainer {
 }
 
 body.dark-mode .resetContainer {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 .resetBackButton {
@@ -331,7 +331,7 @@ body.dark-mode .sidebarToolbar {
 body.dark-mode .sidebarDrawerPaper {
     background-color: #616161 !important;
     color: #e0e0e0 !important;
-    border-right: 1px solid #555555 !important;
+    border-right: 1px solid #707070 !important;
 }
 
 .sidebarNav {
@@ -352,7 +352,7 @@ body.dark-mode .sidebarDrawerPaper {
 }
 
 body.dark-mode .dashContainer {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 .dashMain {
@@ -434,7 +434,7 @@ body.dark-mode .dashContainer {
 }
 
 body.dark-mode .passText {
-    background-color: #333333;
+    background-color: #4a4a4a;
     color: #e0e0e0;
 }
 
@@ -496,7 +496,7 @@ body.dark-mode .passText {
 }
 
 body.dark-mode .aboutContainer {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 .aboutContentContainer {
@@ -524,7 +524,7 @@ body.dark-mode .aboutContainer {
 }
 
 body.dark-mode .aboutPaper {
-    background-color: #424242;
+    background-color: #616161;
     box-shadow: none;
 }
 
@@ -561,7 +561,7 @@ body.dark-mode .aboutPaper {
 }
 
 body.dark-mode .container {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 .paper {
@@ -573,7 +573,7 @@ body.dark-mode .container {
 }
 
 body.dark-mode .paper {
-    background-color: #424242;
+    background-color: #616161;
 }
 
 .backButton {
@@ -631,8 +631,8 @@ body.light-mode .footer {
 }
 
 body.dark-mode .footer {
-    background-color: #424242;
-    color: #b7b2b2;
+    background-color: #616161;
+    color: #e0e0e0;
 }
 
 /* ============================================================
@@ -642,23 +642,23 @@ body.dark-mode .footer {
 body.dark-mode .MuiCard-root,
 body.dark-mode .MuiPaper-root,
 body.dark-mode .MuiDialog-paper {
-    background-color: #424242 !important;
+    background-color: #616161 !important;
     color: #e0e0e0 !important;
     box-shadow: none !important;
 }
 
 body.dark-mode .MuiInputBase-root,
 body.dark-mode .MuiOutlinedInput-root {
-    background-color: #333333 !important;
+    background-color: #4a4a4a !important;
     color: #e0e0e0 !important;
 }
 
 body.dark-mode .MuiOutlinedInput-notchedOutline {
-    border-color: #555555 !important;
+    border-color: #707070 !important;
 }
 
 body.dark-mode .MuiInputLabel-root {
-    color: #aaaaaa !important;
+    color: #bbbbbb !important;
 }
 
 body.dark-mode .MuiTypography-root {
@@ -666,11 +666,11 @@ body.dark-mode .MuiTypography-root {
 }
 
 body.dark-mode .MuiSvgIcon-root {
-    color: #aaaaaa !important;
+    color: #bbbbbb !important;
 }
 
 body.dark-mode .MuiChip-root {
-    background-color: #555555 !important;
+    background-color: #707070 !important;
     color: #e0e0e0 !important;
 }
 
@@ -683,15 +683,15 @@ body.dark-mode .MuiSlider-root {
 }
 
 body.dark-mode .MuiDivider-root {
-    border-color: #555555 !important;
+    border-color: #707070 !important;
 }
 
 body.dark-mode .MuiListItem-root:hover {
-    background-color: #555555 !important;
+    background-color: #707070 !important;
 }
 
 body.dark-mode .MuiMenuItem-root:hover {
-    background-color: #555555 !important;
+    background-color: #707070 !important;
 }
 
 body.dark-mode .MuiListItemText-primary {
@@ -699,7 +699,7 @@ body.dark-mode .MuiListItemText-primary {
 }
 
 body.dark-mode .MuiListItemText-secondary {
-    color: #aaaaaa !important;
+    color: #bbbbbb !important;
 }
 
 body.dark-mode .MuiListItemIcon-root {
@@ -708,15 +708,15 @@ body.dark-mode .MuiListItemIcon-root {
 
 body.dark-mode .MuiTableCell-root {
     color: #e0e0e0 !important;
-    border-color: #555555 !important;
+    border-color: #707070 !important;
 }
 
 body.dark-mode .MuiSelect-icon {
-    color: #aaaaaa !important;
+    color: #bbbbbb !important;
 }
 
 body.dark-mode .MuiLinearProgress-root {
-    background-color: #555555 !important;
+    background-color: #707070 !important;
 }
 
 /* ============================================================
