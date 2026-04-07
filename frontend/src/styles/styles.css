@@ -676,10 +676,7 @@ body.dark-mode .footer {
     color: #b7b2b2;
 }
 
-/* ============================================================
-   DARK MODE - MUI OVERRIDES
-   ============================================================ */
-
+/* Dark Mode */
 body.dark-mode .MuiDrawer-paper {
     background-color: #616161 !important;
     color: #e0e0e0 !important;
@@ -748,35 +745,6 @@ body.dark-mode .MuiChip-colorSuccess {
     color: #ffffff !important;
 }
 
-/* Checkbox unchecked — borda branca, fundo claro */
-.MuiCheckbox-root:not(.Mui-checked) .MuiSvgIcon-root {
-    color: #ffffff !important;
-    filter: drop-shadow(0 0 0 1px #bbbbbb);
-}
-
-/* Checkbox checked — fundo azul, tick branco */
-.MuiCheckbox-root.Mui-checked {
-    color: #1976d2 !important;
-}
-
-.MuiCheckbox-root.Mui-checked svg path {
-    fill: #ffffff !important;
-}
-
-/* Dark mode — mesmos estilos */
-body.dark-mode .MuiCheckbox-root:not(.Mui-checked) .MuiSvgIcon-root {
-    color: #ffffff !important;
-    filter: drop-shadow(0 0 0 1px #888888);
-}
-
-body.dark-mode .MuiCheckbox-root.Mui-checked {
-    color: #1976d2 !important;
-}
-
-body.dark-mode .MuiCheckbox-root.Mui-checked svg path {
-    fill: #ffffff !important;
-}
-
 body.dark-mode .MuiSlider-root {
     color: #4a90d9 !important;
 }
@@ -818,11 +786,34 @@ body.dark-mode .MuiLinearProgress-root {
     background-color: #555555 !important;
 }
 
-/* ============================================================
-   MEDIA QUERIES
-   ============================================================ */
+/* Checkboxes */
+.MuiCheckbox-root:not(.Mui-checked) .MuiSvgIcon-root {
+    color: #ffffff !important;
+    filter: drop-shadow(0 0 0 1px #bbbbbb);
+}
 
-/* Tablets (max 900px) */
+.MuiCheckbox-root.Mui-checked {
+    color: #1976d2 !important;
+}
+
+.MuiCheckbox-root.Mui-checked svg path {
+    fill: #ffffff !important;
+}
+
+body.dark-mode .MuiCheckbox-root:not(.Mui-checked) .MuiSvgIcon-root {
+    color: #ffffff !important;
+    filter: drop-shadow(0 0 0 1px #888888);
+}
+
+body.dark-mode .MuiCheckbox-root.Mui-checked {
+    color: #1976d2 !important;
+}
+
+body.dark-mode .MuiCheckbox-root.Mui-checked svg path {
+    fill: #ffffff !important;
+}
+
+/* Media Queries */
 @media (max-width: 900px) {
     .navAppBar {
         width: 100%;
@@ -863,7 +854,6 @@ body.dark-mode .MuiLinearProgress-root {
     }
 }
 
-/* Mobile (max 600px) */
 @media (max-width: 600px) {
     .safePaper {
         padding: 24px 16px;
