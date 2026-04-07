@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Paper, Box, TextField, Button, Avatar, Grid, IconButton } from '@mui/material';
+import { Typography, Paper, Box, TextField, Button, Avatar, Grid, IconButton } from '@mui/material';
 import { PhotoCamera, Delete, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import '../styles/styles.css';
@@ -12,10 +12,10 @@ const Profile = ({ notificationsRef }) => {
   const [formData, setFormData] = useState({ password: '', confirmPassword: '' });
 
   const messages = {
-    passwordsMismatch: 'Passwords do not match.',
-    passwordUpdateSuccess: 'Password updated successfully.',
-    avatarUploadSuccess: 'Avatar uploaded successfully.',
-    avatarRemoveSuccess: 'Avatar removed successfully.',
+    passwordsMismatch: "Passwords don't match.",
+    passwordUpdateSuccess: 'Password updated!',
+    avatarUploadSuccess: 'Photo updated!',
+    avatarRemoveSuccess: 'Photo removed.',
   };
 
   useEffect(() => {
@@ -104,7 +104,8 @@ const Profile = ({ notificationsRef }) => {
   if (!isAuthenticated) return null;
 
   return (
-    <Container maxWidth="sm" className="container">
+    <Box sx={{ minHeight: '100vh', width: '100vw', backgroundColor: '#f0f2f5', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px', boxSizing: 'border-box' }}>
+      <Box sx={{ width: '100%', maxWidth: '600px' }}>
       <Paper elevation={2} className="paper">
         <IconButton
           onClick={() => navigate('/')}
@@ -180,7 +181,8 @@ const Profile = ({ notificationsRef }) => {
           </Grid>
         </Box>
       </Paper>
-    </Container>
+      </Box>
+    </Box>
   );
 };
 

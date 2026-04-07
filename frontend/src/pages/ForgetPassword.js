@@ -22,12 +22,12 @@ const ForgotPassword = ({ notificationsRef }) => {
   const navigate = useNavigate();
 
   const errorMessages = {
-    usernameRequired: 'Please enter a username.',
-    newPasswordRequired: 'Please enter a new password.',
-    confirmPasswordRequired: 'Please confirm your password.',
-    passwordsMismatch: 'Passwords do not match.',
-    userNotFound: 'User not found. Please check the username and try again.',
-    passwordUpdated: 'Password updated successfully.',
+    usernameRequired: 'Enter your username.',
+    newPasswordRequired: 'Enter a new password.',
+    confirmPasswordRequired: 'Confirm your password.',
+    passwordsMismatch: "Passwords don't match.",
+    userNotFound: 'Username not found.',
+    passwordUpdated: 'Password updated!',
   };
 
   const handleSubmit = async (e) => {

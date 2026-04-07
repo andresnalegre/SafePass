@@ -22,9 +22,8 @@ const Login = ({ notificationsRef }) => {
   const location = useLocation();
 
   const errorMessages = {
-    loginSuccess: 'Login successful!',
-    invalidCredentials: 'Invalid credentials.',
-    serverError: 'Error connecting to the server.',
+    invalidCredentials: 'Wrong username or password.',
+    serverError: 'Something went wrong.',
   };
 
   useEffect(() => {
@@ -48,10 +47,9 @@ const Login = ({ notificationsRef }) => {
     localStorage.setItem('user_id', user.id);
     localStorage.setItem('username', username);
 
-    notificationsRef.current.showSnackbar(errorMessages.loginSuccess, 'success');
+    notificationsRef.current.showSnackbar(`Welcome back, ${username}!`, 'success');
 
     setTimeout(() => {
-      notificationsRef.current.showSnackbar(`Welcome, ${username}!`, 'success');
       window.location.reload();
     }, 1000);
   };

@@ -55,11 +55,11 @@ const Dashboard = ({ notificationsRef }) => {
   const secondaryTextColor = darkMode ? '#cccccc' : '#666666';
 
   const messages = {
-    copyPasswordSuccess: 'Password copied to clipboard.',
-    copyPasswordError: 'Failed to copy password.',
-    deletePasswordSuccess: 'Password deleted successfully.',
-    savePasswordSuccess: 'Password saved successfully.',
-    allFieldsRequired: 'All fields are required.',
+    copyPasswordSuccess: 'Copied!',
+    copyPasswordError: 'Could not copy.',
+    deletePasswordSuccess: 'Deleted.',
+    savePasswordSuccess: 'Saved!',
+    allFieldsRequired: 'Fill in all fields.',
   };
 
   useEffect(() => {

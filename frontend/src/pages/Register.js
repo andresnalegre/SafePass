@@ -22,13 +22,13 @@ const Register = ({ notificationsRef }) => {
   const navigate = useNavigate();
 
   const errorMessages = {
-    usernameRequired: 'Please enter a username.',
-    passwordRequired: 'Please enter a password.',
-    confirmPasswordRequired: 'Please confirm your password.',
-    passwordsMismatch: 'Passwords do not match.',
-    invalidUsername: 'Use only lowercase letters and numbers.',
-    usernameExists: 'Username already exists.',
-    registrationSuccess: 'User registered successfully.',
+    usernameRequired: 'Enter a username.',
+    passwordRequired: 'Enter a password.',
+    confirmPasswordRequired: 'Confirm your password.',
+    passwordsMismatch: "Passwords don't match.",
+    invalidUsername: 'Lowercase letters and numbers only.',
+    usernameExists: 'Username already taken.',
+    registrationSuccess: 'Done!',
   };
 
   const handleSubmit = async (e) => {

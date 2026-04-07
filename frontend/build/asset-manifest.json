@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/SafePass/static/css/main.dee7c02f.css",
-    "main.js": "/SafePass/static/js/main.a27c3485.js",
+    "main.css": "/SafePass/static/css/main.1fc1e4b2.css",
+    "main.js": "/SafePass/static/js/main.bae0b4f5.js",
     "static/media/Helvetica-BoldOblique.ttf": "/SafePass/static/media/Helvetica-BoldOblique.515cc70a63c280858dc7.ttf",
     "static/media/SafePass.svg": "/SafePass/static/media/SafePass.9abeeed997943bb6ae5766c2f1d9e6ad.svg",
     "static/media/logo.svg": "/SafePass/static/media/logo.c4378bfe226f16e33385a041b0daddf2.svg",
     "index.html": "/SafePass/index.html",
-    "main.dee7c02f.css.map": "/SafePass/static/css/main.dee7c02f.css.map",
-    "main.a27c3485.js.map": "/SafePass/static/js/main.a27c3485.js.map"
+    "main.1fc1e4b2.css.map": "/SafePass/static/css/main.1fc1e4b2.css.map",
+    "main.bae0b4f5.js.map": "/SafePass/static/js/main.bae0b4f5.js.map"
   },
   "entrypoints": [
-    "static/css/main.dee7c02f.css",
-    "static/js/main.a27c3485.js"
+    "static/css/main.1fc1e4b2.css",
+    "static/js/main.bae0b4f5.js"
   ]
 }
