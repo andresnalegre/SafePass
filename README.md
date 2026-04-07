@@ -14,7 +14,7 @@
 
 **SafePass** is a demo password manager designed to easily create secure and strong passwords. It features a password strength validator that shows how strong your password is, and makes it simple to store and manage them.
 
-Everything runs in the browser using `localStorage` — no real backend. Not meant for production, just a demo.
+Everything runs in the browser using `localStorage`.
 
 ## Features
 
