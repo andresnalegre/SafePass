@@ -16,7 +16,7 @@
 
 ## About
 
-**SafePass** is a password manager designed to easily create strong and secure passwords. It features a strength validator that shows how strong your password is and makes it easy to store and manage them. The live version runs in the browser using `localStorage` and does not use a database.
+**SafePass** is a password manager designed to easily create strong and secure passwords. It features a strength validator that shows how strong your password is and makes it easy to store and manage them. The live demo version runs in the browser using `localStorage` and does not use a database.
 
 ## Features
 
